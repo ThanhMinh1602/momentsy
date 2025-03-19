@@ -16,11 +16,11 @@ class StatusCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius10),
-      child: Stack(children: [_buildImage(), _buildUploadBy()]),
+      child: Stack(children: [_buildImage(), _buildImageNotifi()]),
     );
   }
 
-  Widget _buildUploadBy() {
+  Widget _buildImageNotifi() {
     return Positioned(
       left: space12,
       right: space12,
@@ -53,7 +53,10 @@ class StatusCardWidget extends StatelessWidget {
                 ),
               ),
               Text(
-                timeago.format(story?.uploadedAt ?? DateTime.now()),
+                timeago.format(
+                  story?.uploadedAt ?? DateTime.now(),
+                  locale: "vi",
+                ),
                 style: AppStyle.regular12.copyWith(
                   color: Colors.white,
                   shadows: [

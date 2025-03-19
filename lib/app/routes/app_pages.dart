@@ -1,6 +1,3 @@
-// app_pages.dart
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:momentsy/app/features/auth/bindings/auth_binding.dart';
 import 'package:momentsy/app/features/auth/views/confirm_otp_screen.dart';
@@ -11,11 +8,12 @@ import 'package:momentsy/app/features/auth/views/reset_password_screen.dart';
 import 'package:momentsy/app/features/camera/bindings/camera_binding.dart';
 import 'package:momentsy/app/features/camera/views/camera_screen.dart';
 import 'package:momentsy/app/features/home/bindings/home_binding.dart';
-import 'package:momentsy/app/features/home/views/home_screen.dart';
 import 'package:momentsy/app/features/main/bindings/main_binding.dart';
 import 'package:momentsy/app/features/main/views/main_screen.dart';
 import 'package:momentsy/app/features/notification/bindings/notification_binding.dart';
 import 'package:momentsy/app/features/setting/bindings/setting_binding.dart';
+import 'package:momentsy/app/features/setting/views/profile_screen.dart';
+import 'package:momentsy/app/features/setting/views/qr_scan_screen.dart';
 import 'package:momentsy/app/features/splash/bindings/splash_binding.dart';
 import 'package:momentsy/app/features/splash/views/splash_screen.dart';
 import 'app_routes.dart';
@@ -68,23 +66,22 @@ class AppPages {
         NotificationBinding(),
         SettingBinding(),
       ],
-      children: [
-        GetPage(
-          name: AppRoutes.HOME,
-          page: () => HomeScreen(),
-          binding: HomeBinding(),
-          children: [
-            GetPage(
-              name: AppRoutes.CAMERA,
-              page: () => CameraScreen(),
-              binding: CameraBinding(),
-            ),
-          ],
-        ),
-        GetPage(name: AppRoutes.CHATLIST, page: () => Container()),
-        GetPage(name: AppRoutes.NOTIFICATION, page: () => Container()),
-        GetPage(name: AppRoutes.SETTING, page: () => Container()),
-      ],
+    ),
+
+    GetPage(
+      name: AppRoutes.CAMERA,
+      page: () => CameraScreen(),
+      binding: CameraBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.PROFILE,
+      page: () => ProfileScreen(),
+      binding: SettingBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.SCANQR,
+      page: () => QrScanScreen(),
+      binding: SettingBinding(),
     ),
   ];
 }

@@ -46,11 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: GestureDetector(
                         onHorizontalDragEnd: (details) {
                           if (details.primaryVelocity! > -1000) {
-                            Get.toNamed(
-                              AppRoutes.MAIN +
-                                  AppRoutes.HOME +
-                                  AppRoutes.CAMERA,
-                            );
+                            Get.toNamed(AppRoutes.CAMERA);
                           }
                         },
                         child: Column(

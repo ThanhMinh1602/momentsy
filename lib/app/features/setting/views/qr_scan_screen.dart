@@ -2,19 +2,21 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:momentsy/app/features/setting/viewmodels/setting_view_model.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
-class ScanQrPage extends StatefulWidget {
-  const ScanQrPage({super.key});
+class QrScanScreen extends StatefulWidget {
+  const QrScanScreen({super.key});
 
   @override
-  State<ScanQrPage> createState() => _ScanQrPageState();
+  State<QrScanScreen> createState() => _QrScanScreenState();
 }
 
-class _ScanQrPageState extends State<ScanQrPage> {
+class _QrScanScreenState extends State<QrScanScreen> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final _settingViewModel = Get.find<SettingViewModel>();
 
   @override
   void reassemble() {
@@ -33,8 +35,8 @@ class _ScanQrPageState extends State<ScanQrPage> {
         children: <Widget>[
           Expanded(flex: 4, child: _buildQrView(context)),
           Obx(() {
-            // final result = _friendController.qrResult.value;
-            if (true) {
+            final result = _settingViewModel.qrResult.value;
+            if (result.isNotEmpty) {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
@@ -46,7 +48,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
                 ),
               );
             }
-            // return const SizedBox.shrink();
+            return const SizedBox.shrink();
           }),
         ],
       ),
@@ -72,17 +74,17 @@ class _ScanQrPageState extends State<ScanQrPage> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
-      // if (scanData.code != null && !_friendController.isProcessing.value) {
-      //   _friendController.isProcessing.value = true;
-      //   controller.pauseCamera();
-      //   _friendController.qrResult.value = scanData.code!;
+      if (scanData.code != null && !_settingViewModel.isProcessing.value) {
+        _settingViewModel.isProcessing.value = true;
+        controller.pauseCamera();
+        _settingViewModel.qrResult.value = scanData.code!;
 
-      //   await _friendController.sendFriendRequest(scanData.code!);
+        await _settingViewModel.sendFriendRequest(scanData.code!);
 
-      //   Future.delayed(const Duration(seconds: 2), () {
-      //     _friendController.isProcessing.value = false;
-      //   });
-      // }
+        Future.delayed(const Duration(seconds: 2), () {
+          _settingViewModel.isProcessing.value = false;
+        });
+      }
     });
   }
 

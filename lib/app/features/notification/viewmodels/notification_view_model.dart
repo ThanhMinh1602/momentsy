@@ -8,40 +8,14 @@ class NotificationViewModel extends GetxController {
   NotificationViewModel({required FriendService friendService})
     : _friendService = friendService;
   final FriendService _friendService;
-  RxList<UserModel> userModel = <UserModel>[].obs; // Danh sách bạn bè
   final String? userId = SharedPreferencesService.getUserId();
-  RxList<FriendRequestModel> friendRequests =
-      <FriendRequestModel>[].obs; // Danh sách lời mời
+  RxList<FriendRequestModel> friendRequests = <FriendRequestModel>[].obs;
   RxBool isLoading = false.obs;
-  RxString qrResult = ''.obs;
-  RxBool isProcessing = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     _getFriendRequests();
-  }
-
-  Future<void> sendFriendRequest(String receiverId) async {
-    if (userId != null) {
-      isLoading.value = true;
-      final result = await _friendService.sendFriendRequest(
-        userId!,
-        receiverId,
-      );
-      isLoading.value = false;
-      Get.back();
-      result.fold(
-        (l) {
-          Get.snackbar('Lỗi', l.message);
-        },
-        (r) {
-          Get.snackbar('Thành công', r);
-        },
-      );
-    } else {
-      Get.snackbar('Cảnh báo', 'Vui lòng đăng nhập');
-    }
   }
 
   Future<void> acceptFriendRequest(String requestId, String status) async {

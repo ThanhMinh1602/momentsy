@@ -7,6 +7,7 @@ import 'package:momentsy/app/routes/app_pages.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   await initApp();
@@ -15,6 +16,8 @@ void main() async {
 
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //set up ở đây để dùng cho timeago cho card trong home
+  timeago.setLocaleMessages('vi', timeago.ViMessages());
   await dotenv.load(fileName: ".env");
   await SharedPreferencesService.init();
 }

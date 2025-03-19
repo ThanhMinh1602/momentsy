@@ -34,4 +34,19 @@ class ImageModel {
       uploadedAt: DateTime.parse(json['uploadedAt']),
     );
   }
+
+  // ✅ Chuyển object thành JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fileId': fileId,
+      'fileName': fileName,
+      'mimeType': mimeType,
+      'viewLink': viewLink,
+      'downloadLink': downloadLink,
+      'uploadedBy': uploadedBy.toJson(), // Gọi toJson() của UserModel
+      'uploadedAt':
+          uploadedAt.toIso8601String(), // Chuyển DateTime thành chuỗi ISO
+    };
+  }
 }

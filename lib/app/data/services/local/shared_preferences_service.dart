@@ -36,4 +36,6 @@ class SharedPreferencesService {
   static String? getUserId() {
     return _prefs?.getString('user_id');
   }
+
+  static String get getUserIds => _prefs?.getString('user_id') ?? '';
 }

@@ -11,8 +11,8 @@ abstract class AppRoutes {
   static const RESETPASSWORD = '/reset-password';
   static const CAMERA = '/camera';
   static const SETTING = '/setting';
-  static const CHAT = '/chat';
-  static const CHATBOX = '/chat-box';
+  static const CHATLIST = '/chat-list';
+  static const CHATDETAIL = '/chat-detail';
   static const NOTIFICATION = '/notification';
   static const PROFILE = '/profile';
   static const SCANQR = '/scan-qr';

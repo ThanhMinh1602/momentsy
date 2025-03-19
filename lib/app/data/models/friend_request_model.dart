@@ -17,12 +17,10 @@ class FriendRequestModel {
     required this.updatedAt,
   });
 
-  // ✅ Chuyển JSON thành object
   factory FriendRequestModel.fromJson(Map<String, dynamic> json) {
     return FriendRequestModel(
       id: json['id'],
-      senderBy:
-          UserModel.fromJson(json['senderBy']), // Đổi senderId -> senderBy
+      senderBy: UserModel.fromJson(json['senderBy']),
       receiverId: json['receiverId'],
       status: json['status'],
       createdAt: DateTime.parse(json['createdAt']),
@@ -30,7 +28,6 @@ class FriendRequestModel {
     );
   }
 
-  // ✅ Chuyển object thành JSON
   Map<String, dynamic> toJson() {
     return {
       '_id': id,

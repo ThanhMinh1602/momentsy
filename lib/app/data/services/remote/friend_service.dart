@@ -8,21 +8,26 @@ import 'package:momentsy/app/data/services/remote/socket_service.dart';
 
 abstract class IFriendService {
   Future<Either<Failure, String>> sendFriendRequest(
-      String senderId, String receiverId);
+    String senderId,
+    String receiverId,
+  );
 
   Future<Either<Failure, String>> acceptFriendRequest(
-      String requestId, String receiverId, String status);
+    String requestId,
+    String receiverId,
+    String status,
+  );
   Future<Either<Failure, List<FriendRequestModel>>> getFriendRequests(
-      String userId);
+    String userId,
+  );
 }
 
 class FriendService extends ApiService implements IFriendService {
-  final SocketService socketService;
-  FriendService(this.socketService);
-
   @override
   Future<Either<Failure, String>> sendFriendRequest(
-      String senderId, String receiverId) async {
+    String senderId,
+    String receiverId,
+  ) async {
     final data = {"senderId": senderId, "receiverId": receiverId};
     print(data);
 
@@ -30,7 +35,8 @@ class FriendService extends ApiService implements IFriendService {
       final response = await post(ApiEndpoint.sendFriendRequest, data: data);
       print("✅ Đã gửi lời mời qua API");
       return Right(
-          response.data['message'] ?? "Gửi lời mời thành công qua API");
+        response.data['message'] ?? "Gửi lời mời thành công qua API",
+      );
     } on DioException catch (e) {
       print("❌ Lỗi khi gửi lời mời: $e");
 
@@ -43,7 +49,8 @@ class FriendService extends ApiService implements IFriendService {
 
   @override
   Future<Either<Failure, List<FriendRequestModel>>> getFriendRequests(
-      String userId) async {
+    String userId,
+  ) async {
     try {
       final response = await get('${ApiEndpoint.friendRequests}/$userId');
 
@@ -66,11 +73,14 @@ class FriendService extends ApiService implements IFriendService {
 
   @override
   Future<Either<Failure, String>> acceptFriendRequest(
-      String requestId, String receiverId, String status) async {
+    String requestId,
+    String receiverId,
+    String status,
+  ) async {
     final data = {
       "requestId": requestId,
       "receiverId": receiverId,
-      "status": status
+      "status": status,
     };
     print(data);
 
@@ -78,7 +88,8 @@ class FriendService extends ApiService implements IFriendService {
       final response = await post(ApiEndpoint.acceptFriendRequest, data: data);
       print("✅ Đã gửi lời mời qua API");
       return Right(
-          response.data['message'] ?? "Gửi lời mời thành công qua API");
+        response.data['message'] ?? "Gửi lời mời thành công qua API",
+      );
     } on DioException catch (e) {
       print("❌ Lỗi khi gửi lời mời: $e");
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:momentsy/app/bindings/app_binding.dart';
 import 'package:momentsy/app/routes/app_pages.dart';
@@ -10,14 +9,13 @@ import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 
 void main() async {
-  initApp();
+  await initApp();
   runApp(MyApp());
 }
 
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  await GetStorage.init();
   await SharedPreferencesService.init();
 }
 

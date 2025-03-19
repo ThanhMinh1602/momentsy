@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/core/config/api_endpoint.dart';
 import 'package:momentsy/core/config/api_service.dart';
 import 'package:momentsy/core/exception/failure.dart';
@@ -19,7 +20,7 @@ class FileService extends ApiService implements IFileService {
       final response = await uploadFile(
         ApiEndpoint.fileUpload,
         file,
-        '67c9e39c676ef3cfa9019974',
+        SharedPreferencesService.getUserIds,
       );
       print('File uploaded: $response');
 

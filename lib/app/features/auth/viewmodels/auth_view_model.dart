@@ -7,11 +7,12 @@ import 'package:momentsy/app/data/body/verify_otp_body.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/auth_service.dart';
 
-class AuthController extends GetxController {
-  static AuthController instance = Get.find();
-
-  final _authService = Get.find<AuthService>();
+class AuthViewModel extends GetxController {
+  final AuthService _authService;
   RxBool isLoading = false.obs;
+
+  AuthViewModel({required AuthService authService})
+    : _authService = authService;
 
   Future<void> register(RegisterBody registerBody) async {
     isLoading.value = true;

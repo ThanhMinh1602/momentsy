@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:momentsy/app/data/services/local/notification_service.dart';
 import 'package:momentsy/app/features/setting/viewmodels/setting_view_model.dart';
 import 'package:momentsy/app/features/setting/views/widgets/setting_item.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
@@ -41,6 +42,17 @@ class SettingPage extends StatelessWidget {
                   Get.toNamed(AppRoutes.PROFILE);
                 },
               ),
+              ElevatedButton(
+                onPressed: () {
+                  NotificationService.showNotification(
+                    id: 1,
+                    title: 'Thông báo mới!',
+                    body: 'Đây là nội dung thông báo của bạn.',
+                  );
+                },
+                child: Text('Gửi thông báo'),
+              ),
+
               SettingItem(
                 title: 'Đăng xuất',
                 icon: Icons.logout,

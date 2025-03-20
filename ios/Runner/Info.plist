@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>UILocalNotification</key>
+<true/>
+<key>UNUserNotificationCenter</key>
+<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Ứng dụng cần truy cập camera để chụp ảnh.</string>
 	<key>CFBundleDevelopmentRegion</key>

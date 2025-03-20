@@ -9,17 +9,8 @@ import 'package:momentsy/app/data/services/remote/socket_service.dart';
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    String? userId = SharedPreferencesService.getUserId();
     Get.put(AuthService());
     Get.put(FileService());
     Get.put(FriendService());
-    if (userId != null) {
-      Get.put(SocketService(userId: userId), permanent: true);
-      Get.put(ChatService(Get.find<SocketService>()));
-    } else {
-      print(
-        "⚠️ Không thể khởi tạo SocketService, userId null. Vui lòng đăng nhập.",
-      );
-    }
   }
 }

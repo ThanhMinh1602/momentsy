@@ -28,18 +28,12 @@ class SocketService extends GetxService {
     _socket.onConnect((_) {
       print("🟢 Connected to WebSocket");
       isConnected.value = true;
-      _socket.emit("register", userId); // Đăng ký userId với backend
+      _socket.emit("register", userId); // Đăng ký userId với BE
     });
 
-    // Nhận lời mời kết bạn từ backend
-    receiveFriendRequest();
-
-    // Nhận thông báo khi lời mời được chấp nhận
-    _socket.on("friendRequestAccepted", (data) {
-      print("✅ Lời mời kết bạn được chấp nhận: $data");
-      if (_onFriendRequestAccepted != null) {
-        _onFriendRequestAccepted!(data);
-      }
+    _socket.onReconnect((_) {
+      print("🔄 WebSocket reconnected");
+      _socket.emit("register", userId);
     });
 
     _socket.onDisconnect((_) {
@@ -51,32 +45,39 @@ class SocketService extends GetxService {
       print("❌ Lỗi kết nối WebSocket: $error");
       isConnected.value = false;
     });
+
+    _listenForFriendRequests();
+    _listenForFriendRequestAccepted();
   }
 
-  Function receiveFriendRequest() {
-    return _socket.on("receiveFriendRequest", (data) {
+  void _listenForFriendRequests() {
+    _socket.on("receiveFriendRequest", (data) {
       print("📩 Nhận lời mời kết bạn: $data");
-      if (_onFriendRequestReceived != null) {
-        _onFriendRequestReceived!(data);
-      }
+      _onFriendRequestReceived?.call(data as Map<String, dynamic>);
     });
   }
 
+  void _listenForFriendRequestAccepted() {
+    _socket.on("friendRequestAccepted", (data) {
+      print("✅ Lời mời kết bạn được chấp nhận: $data");
+      _onFriendRequestAccepted?.call(data as Map<String, dynamic>);
+    });
+  }
+
+  // Setters để lắng nghe sự kiện
   set onMessageReceived(Function(Map<String, dynamic>) callback) {
     _onMessageReceived = callback;
   }
 
-  // Callback khi nhận lời mời kết bạn
   set onFriendRequestReceived(Function(Map<String, dynamic>) callback) {
     _onFriendRequestReceived = callback;
   }
 
-  // Callback khi lời mời được chấp nhận
   set onFriendRequestAccepted(Function(Map<String, dynamic>) callback) {
     _onFriendRequestAccepted = callback;
   }
 
-  // Phát sự kiện tới backend
+  // Phát sự kiện tới backend (nếu cần cho các trường hợp khác)
   void emitEvent(String eventName, dynamic data) {
     if (_socket.connected) {
       _socket.emit(eventName, data);
@@ -85,15 +86,15 @@ class SocketService extends GetxService {
     }
   }
 
-  // Gửi lời mời kết bạn qua Socket
-  void sendFriendRequest(String receiverId) {
-    emitEvent("sendFriendRequest", {
-      "senderId": userId,
-      "receiverId": receiverId,
-    });
+  @override
+  void onClose() {
+    dispose();
+    super.onClose();
   }
 
   void dispose() {
+    _socket.off("receiveFriendRequest");
+    _socket.off("friendRequestAccepted");
     _socket.disconnect();
     _socket.dispose();
   }

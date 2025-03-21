@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:momentsy/core/config/api_endpoint.dart';
-import 'package:momentsy/core/config/api_service.dart';
+import 'package:momentsy/core/config/api/api_endpoint.dart';
+import 'package:momentsy/core/config/api/api_service.dart';
 import 'package:momentsy/app/data/body/chat_body.dart';
 import 'package:momentsy/app/data/services/remote/socket_service.dart';
 

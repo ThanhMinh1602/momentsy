@@ -36,11 +36,12 @@ class NotificationScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: space12),
-                          Text(
-                            request.senderBy.name,
-                            style: TextStyle(color: AppColor.white),
+                          Expanded(
+                            child: Text(
+                              request.senderBy.name,
+                              style: TextStyle(color: AppColor.white),
+                            ),
                           ),
-                          Spacer(),
                           IconButton(
                             onPressed: () {
                               notifiController.acceptFriendRequest(

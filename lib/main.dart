@@ -1,12 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:momentsy/app/bindings/app_binding.dart';
-import 'package:momentsy/app/data/services/local/notification_service.dart';
 import 'package:momentsy/app/data/services/remote/socket_service.dart';
 import 'package:momentsy/app/routes/app_pages.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
+import 'package:momentsy/core/config/firebase/notification_service.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -29,10 +30,9 @@ Future<void> initApp() async {
   //set up ở đây để dùng cho timeago cho card trong home
   await dotenv.load(fileName: ".env");
   timeago.setLocaleMessages('vi', timeago.ViMessages());
-
+  await Firebase.initializeApp();
+  await NotificationService().initFirebase();
   await SharedPreferencesService.init();
-  await NotificationService.requestPermissions(); // Xin quyền thông báo
-  await NotificationService.init();
 }
 
 class MyApp extends StatelessWidget {

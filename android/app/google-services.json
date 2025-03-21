@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "280988685823",
+    "project_id": "momentsy-55ac3",
+    "storage_bucket": "momentsy-55ac3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280988685823:android:39f1660e22d03485dc03ca",
+        "android_client_info": {
+          "package_name": "com.example.momentsy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9wIZKoSAEWXhqsn4a-oAqpbyJvmy6kBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -58,7 +58,7 @@ class SocketService extends GetxService {
   }
 
   void _listenForFriendRequestAccepted() {
-    _socket.on("friendRequestAccepted", (data) {
+    _socket.on("friendRequestResponse", (data) {
       print("✅ Lời mời kết bạn được chấp nhận: $data");
       _onFriendRequestAccepted?.call(data as Map<String, dynamic>);
     });
@@ -94,7 +94,7 @@ class SocketService extends GetxService {
 
   void dispose() {
     _socket.off("receiveFriendRequest");
-    _socket.off("friendRequestAccepted");
+    _socket.off("friendRequestResponse");
     _socket.disconnect();
     _socket.dispose();
   }

@@ -10,8 +10,8 @@ abstract class ApiService with DioExceptionMixin {
     _dio = Dio(
       BaseOptions(
         baseUrl: dotenv.env['BASE_API'] ?? "http://localhost:5000",
-        connectTimeout: Duration(seconds: 10),
-        receiveTimeout: Duration(seconds: 10),
+        connectTimeout: Duration(seconds: 40),
+        receiveTimeout: Duration(seconds: 40),
         headers: {'Content-Type': 'application/json'},
       ),
     );

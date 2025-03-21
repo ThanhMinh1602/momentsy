@@ -72,31 +72,35 @@ class NotificationViewModel extends GetxController {
   }
 
   void _setupSocketListeners() {
-    // Lắng nghe khi nhận được lời mời kết bạn
+    // Lắng nghe khi có lời mời kết bạn mới
     _socketService.onFriendRequestReceived = (data) async {
       print("📩 Nhận lời mời qua socket: $data");
       final friendRequest = FriendRequestModel.fromJson(data);
 
-      // Kiểm tra trùng lặp trước khi thêm
       if (!friendRequests.any((req) => req.id == friendRequest.id)) {
         await NotificationService.showNotification(
           id: friendRequest.id.hashCode,
-          title: 'Yêu cầu kết bạn mới!',
+          title: 'Lời mời kết bạn!',
           body: '${friendRequest.senderBy.name} đã gửi lời mời kết bạn.',
         );
         friendRequests.add(friendRequest);
       }
     };
 
-    // Lắng nghe khi lời mời được chấp nhận (xóa khỏi danh sách nếu cần)
-    _socketService.onFriendRequestAccepted = (data) {
+    // Lắng nghe khi lời mời được chấp nhận
+    _socketService.onFriendRequestAccepted = (data) async {
       print("✅ Lời mời được chấp nhận qua socket: $data");
       final requestId = data['requestId']?.toString();
+      final message = data['message']?.toString();
       if (requestId != null) {
+        await NotificationService.showNotification(
+          id: requestId.hashCode,
+          title: 'Thông báo kết bạn',
+          body: message ?? 'Yêu cầu kết bạn đã được chấp nhận.',
+        );
         friendRequests.removeWhere((req) => req.id == requestId);
       } else {
-        // Nếu không có requestId, cập nhật lại từ API để đảm bảo đồng bộ
-        _getFriendRequests();
+        _getFriendRequests(); // Cập nhật lại danh sách nếu dữ liệu không chính xác
       }
     };
   }

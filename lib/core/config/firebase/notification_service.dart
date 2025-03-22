@@ -51,13 +51,15 @@ class NotificationService {
   /// Lắng nghe thông báo khi app mở
   void _setupForegroundNotifications() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("📩 Nhận thông báo khi app mở: ${message.notification?.title}");
+      if (message.notification != null) {
+        print("📩 Nhận thông báo khi app mở: ${message.notification?.title}");
 
-      // Hiển thị thông báo trên UI
-      _showNotification(
-        message.notification?.title,
-        message.notification?.body,
-      );
+        // Hiển thị thông báo trên UI
+        _showNotification(
+          message.notification?.title,
+          message.notification?.body,
+        );
+      }
     });
   }
 

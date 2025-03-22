@@ -42,17 +42,6 @@ class SettingPage extends StatelessWidget {
                   Get.toNamed(AppRoutes.PROFILE);
                 },
               ),
-              ElevatedButton(
-                onPressed: () {
-                  NotificationService.showNotification(
-                    id: 1,
-                    title: 'Thông báo mới!',
-                    body: 'Đây là nội dung thông báo của bạn.',
-                  );
-                },
-                child: Text('Gửi thông báo'),
-              ),
-
               SettingItem(
                 title: 'Đăng xuất',
                 icon: Icons.logout,

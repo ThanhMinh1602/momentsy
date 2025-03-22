@@ -4,11 +4,6 @@ import 'package:momentsy/app/features/notification/viewmodels/notification_view_
 class NotificationBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(
-      () => NotificationViewModel(
-        friendService: Get.find(),
-        socketService: Get.find(),
-      ),
-    );
+    Get.lazyPut(() => NotificationViewModel(friendService: Get.find()));
   }
 }

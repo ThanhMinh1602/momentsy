@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:momentsy/app/bindings/app_binding.dart';
-import 'package:momentsy/app/data/services/remote/socket_service.dart';
 import 'package:momentsy/app/routes/app_pages.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/config/firebase/notification_service.dart';
@@ -14,21 +13,14 @@ import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   await initApp();
-  final userId = SharedPreferencesService.getUserIds;
-  if (userId.isNotEmpty) {
-    Get.put(SocketService(userId: userId), permanent: true);
-  } else {
-    print(
-      "⚠️ Không thể khởi tạo SocketService, userId null. Vui lòng đăng nhập.",
-    );
-  }
   runApp(MyApp());
 }
 
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //set up ở đây để dùng cho timeago cho card trong home
+
   await dotenv.load(fileName: ".env");
+  //set up ở đây để dùng cho timeago cho card trong home
   timeago.setLocaleMessages('vi', timeago.ViMessages());
   await Firebase.initializeApp();
   await NotificationService().initFirebase();

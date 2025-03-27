@@ -19,17 +19,28 @@ class BaseScreenAuthWidget extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 16.0).copyWith(
-                    top: MediaQuery.of(context).padding.top + space24,
-                    bottom: MediaQuery.of(context).padding.bottom + space24),
+                  top: MediaQuery.of(context).padding.top + space24,
+                  bottom: MediaQuery.of(context).padding.bottom + space24,
+                ),
                 padding: EdgeInsets.all(24.0),
                 decoration: BoxDecoration(
-                    // ignore: deprecated_member_use
-                    color: AppColor.white.withOpacity(0.6),
-                    borderRadius: BorderRadius.circular(borderRadius12),
-                    border: Border.all(color: AppColor.white, width: 1.0)),
+                  color: AppColor.surface,
+                  borderRadius: BorderRadius.circular(borderRadius12),
+                  border: Border.all(
+                    color: AppColor.grey.withOpacity(0.1),
+                    width: 1.0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.shadow,
+                      blurRadius: 15,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
                 child: child,
               ),
-            )
+            ),
           ],
         ),
       ),

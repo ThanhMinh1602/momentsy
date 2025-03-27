@@ -59,7 +59,7 @@ class AppStyle {
   static TextStyle medium14 = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
-    color: AppColor.k1A1C1E,
+    color: AppColor.textPrimary,
   );
 
   static TextStyle semiBold12 = TextStyle(

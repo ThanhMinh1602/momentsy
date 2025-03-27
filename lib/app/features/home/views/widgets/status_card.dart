@@ -15,8 +15,15 @@ class StatusCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius10),
-      child: Stack(children: [_buildImage(), _buildImageNotifi()]),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(color: AppColor.shadow, blurRadius: 8, spreadRadius: 2),
+          ],
+        ),
+        child: Stack(children: [_buildImage(), _buildImageNotifi()]),
+      ),
     );
   }
 
@@ -27,13 +34,26 @@ class StatusCardWidget extends StatelessWidget {
       top: space12,
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: AppColor.white,
-            backgroundImage:
-                story?.uploadedBy.avatar != null
-                    ? NetworkImage(story!.uploadedBy.avatar!)
-                    : AssetImage(Assets.images.avatarNull.path),
-            radius: 22,
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColor.primary, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColor.shadow,
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              backgroundColor: AppColor.primaryLight,
+              backgroundImage:
+                  story?.uploadedBy.avatar != null
+                      ? NetworkImage(story!.uploadedBy.avatar!)
+                      : AssetImage(Assets.images.avatarNull.path),
+              radius: 22,
+            ),
           ),
           SizedBox(width: 10),
           Column(
@@ -42,12 +62,15 @@ class StatusCardWidget extends StatelessWidget {
               Text(
                 story?.uploadedBy.name ?? 'Unknown',
                 maxLines: 1,
-                style: AppStyle.bold16.copyWith(
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                   shadows: [
                     Shadow(
-                      color: Colors.black,
+                      color: Colors.black54,
                       offset: Offset(1, 1),
-                      blurRadius: 20,
+                      blurRadius: 8,
                     ),
                   ],
                 ),
@@ -57,13 +80,14 @@ class StatusCardWidget extends StatelessWidget {
                   story?.uploadedAt ?? DateTime.now(),
                   locale: "vi",
                 ),
-                style: AppStyle.regular12.copyWith(
+                style: TextStyle(
+                  fontSize: 12,
                   color: Colors.white,
                   shadows: [
                     Shadow(
-                      color: Colors.black,
+                      color: Colors.black54,
                       offset: Offset(1, 1),
-                      blurRadius: 20,
+                      blurRadius: 8,
                     ),
                   ],
                 ),
@@ -71,9 +95,15 @@ class StatusCardWidget extends StatelessWidget {
             ],
           ),
           Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.more_horiz, color: Colors.white),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black38,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.more_horiz, color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -85,12 +115,28 @@ class StatusCardWidget extends StatelessWidget {
         ? Image.asset(Assets.images.imageNull.path)
         : CachedNetworkImage(
           imageUrl: story!.downloadLink,
-          fit: BoxFit.scaleDown,
+          fit: BoxFit.cover,
           placeholder:
-              (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
+              (context, url) => Center(
+                child: CircularProgressIndicator(color: AppColor.primary),
+              ),
           errorWidget:
-              (context, url, error) => const Icon(Icons.error, size: 50),
+              (context, url, error) => Container(
+                color: AppColor.cardLight,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error, size: 50, color: AppColor.error),
+                      SizedBox(height: 8),
+                      Text(
+                        'Không thể tải ảnh',
+                        style: TextStyle(color: AppColor.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
         );
   }
 }

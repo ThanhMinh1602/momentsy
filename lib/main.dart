@@ -39,18 +39,70 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.pages,
       initialBinding: AppBinding(),
       theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme(),
+        textTheme: GoogleFonts.interTextTheme(
+          TextTheme(
+            bodyLarge: TextStyle(color: AppColor.textPrimary),
+            bodyMedium: TextStyle(color: AppColor.textPrimary),
+            titleLarge: TextStyle(
+              color: AppColor.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            titleMedium: TextStyle(color: AppColor.textPrimary),
+            labelLarge: TextStyle(color: AppColor.textPrimary),
+          ),
+        ),
         primaryColor: AppColor.primary,
+        scaffoldBackgroundColor: AppColor.background,
+        cardColor: AppColor.cardLight,
         colorScheme: ColorScheme(
           brightness: Brightness.light,
           primary: AppColor.primary,
           onPrimary: AppColor.white,
-          secondary: AppColor.grey,
-          onSecondary: AppColor.grey,
-          error: AppColor.red,
+          secondary: AppColor.secondary,
+          onSecondary: AppColor.white,
+          error: AppColor.error,
           onError: AppColor.white,
-          surface: AppColor.white,
-          onSurface: AppColor.k1A1C1E,
+          background: AppColor.background,
+          onBackground: AppColor.textPrimary,
+          surface: AppColor.surface,
+          onSurface: AppColor.textPrimary,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColor.primary,
+          foregroundColor: AppColor.white,
+          elevation: 0,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: AppColor.surface,
+          selectedItemColor: AppColor.primary,
+          unselectedItemColor: AppColor.grey,
+          elevation: 8,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColor.primary,
+            foregroundColor: AppColor.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: AppColor.surface,
+          hintStyle: TextStyle(color: AppColor.textHint),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppColor.grey.withOpacity(0.3)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppColor.grey.withOpacity(0.3)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: AppColor.primary, width: 1.5),
+          ),
         ),
       ),
     );

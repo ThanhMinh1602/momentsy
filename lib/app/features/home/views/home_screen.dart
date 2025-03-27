@@ -31,11 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
-          color: AppColor.k1A1C1E,
+          color: AppColor.background,
           child: Obx(
             () =>
                 homeController.isLoading.value
-                    ? Center(child: CircularProgressIndicator())
+                    ? Center(
+                      child: CircularProgressIndicator(color: AppColor.primary),
+                    )
                     : Padding(
                       padding: EdgeInsets.only(
                         bottom: space12,
@@ -52,20 +54,38 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           children: [
                             Expanded(
-                              child: PreloadPageView.builder(
-                                key: PageStorageKey("pageView"),
-                                controller: _pageController,
-                                scrollDirection: Axis.vertical,
-                                itemCount: homeController.images.length,
-                                preloadPagesCount: 10,
-                                itemBuilder: (context, index) {
-                                  final story = homeController.images[index];
-                                  return Center(
-                                    child: StatusCardWidget(story: story),
-                                  );
-                                },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: PreloadPageView.builder(
+                                  key: PageStorageKey("pageView"),
+                                  controller: _pageController,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: homeController.images.length,
+                                  preloadPagesCount: 10,
+                                  physics: BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    final story = homeController.images[index];
+                                    return AnimatedContainer(
+                                      duration: Duration(milliseconds: 300),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppColor.shadow,
+                                            blurRadius: 10,
+                                            spreadRadius: 2,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: StatusCardWidget(story: story),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
+                            SizedBox(height: 12),
                             CustomSendMessageField(),
                           ],
                         ),

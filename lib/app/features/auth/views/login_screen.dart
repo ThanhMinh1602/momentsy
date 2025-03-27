@@ -103,9 +103,16 @@ class _LoginScreenState extends State<LoginScreen> {
         height: 48.0,
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: AppColor.white,
-          border: Border.all(color: AppColor.kEFF0F6),
+          color: AppColor.cardLight,
           borderRadius: BorderRadius.circular(borderRadius10),
+          boxShadow: [
+            BoxShadow(
+              color: AppColor.shadow,
+              blurRadius: 4,
+              spreadRadius: 0,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: SvgPicture.asset(icon),
       ),
@@ -116,11 +123,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       children: [
         Expanded(
-          child: Divider(color: AppColor.white, endIndent: 16.0, thickness: 1),
+          child: Divider(
+            color: AppColor.grey.withOpacity(0.3),
+            endIndent: 16.0,
+            thickness: 1,
+          ),
         ),
-        Text('Đăng nhập bằng', style: AppStyle.regular12),
+        Text(
+          'Đăng nhập bằng',
+          style: AppStyle.regular12.copyWith(color: AppColor.textSecondary),
+        ),
         Expanded(
-          child: Divider(color: AppColor.white, indent: 16.0, thickness: 1),
+          child: Divider(
+            color: AppColor.grey.withOpacity(0.3),
+            indent: 16.0,
+            thickness: 1,
+          ),
         ),
       ],
     );

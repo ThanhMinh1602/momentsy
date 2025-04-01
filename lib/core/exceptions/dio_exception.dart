@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:momentsy/core/exception/failure.dart';
+import 'package:momentsy/core/exceptions/failure.dart';
 
 mixin DioExceptionMixin {
   Failure handleDioException(DioException e) {

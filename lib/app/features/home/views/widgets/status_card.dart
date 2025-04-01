@@ -34,33 +34,20 @@ class StatusCardWidget extends StatelessWidget {
       top: space12,
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColor.primary, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColor.shadow,
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                ),
-              ],
-            ),
-            child: CircleAvatar(
-              backgroundColor: AppColor.primaryLight,
-              backgroundImage:
-                  story?.uploadedBy.avatar != null
-                      ? NetworkImage(story!.uploadedBy.avatar!)
-                      : AssetImage(Assets.images.avatarNull.path),
-              radius: 22,
-            ),
+          CircleAvatar(
+            backgroundColor: AppColor.white,
+            backgroundImage:
+                story?.uploadedBy?.avatar != null
+                    ? NetworkImage(story!.uploadedBy!.avatar!)
+                    : AssetImage(Assets.images.avatarNull.path),
+            radius: 22,
           ),
           SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                story?.uploadedBy.name ?? 'Unknown',
+                story?.uploadedBy?.name ?? 'Unknown',
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: 16,
@@ -114,8 +101,8 @@ class StatusCardWidget extends StatelessWidget {
     return story?.downloadLink == null
         ? Image.asset(Assets.images.imageNull.path)
         : CachedNetworkImage(
-          imageUrl: story!.downloadLink,
-          fit: BoxFit.cover,
+          imageUrl: story!.downloadLink!,
+          fit: BoxFit.scaleDown,
           placeholder:
               (context, url) => Center(
                 child: CircularProgressIndicator(color: AppColor.primary),

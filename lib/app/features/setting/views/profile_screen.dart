@@ -31,9 +31,13 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Hồ sơ cá nhân"), centerTitle: true),
       backgroundColor: AppColor.background,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+      body: Container(
+        width: context.getWidth,
+        height: context.getHeight,
+        padding: EdgeInsets.all(context.getWidth * 0.05),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

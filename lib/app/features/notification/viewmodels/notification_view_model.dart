@@ -2,11 +2,12 @@ import 'package:get/get.dart';
 import 'package:momentsy/app/data/models/friend_request_model.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/friend_service.dart';
-import 'package:momentsy/core/config/firebase/notification_service.dart';
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class NotificationViewModel extends GetxController {
+class NotificationViewModel extends BaseViewModel {
   NotificationViewModel({required FriendService friendService})
     : _friendService = friendService;
+
   final FriendService _friendService;
   final String? userId = SharedPreferencesService.getUserId();
   RxList<FriendRequestModel> friendRequests = <FriendRequestModel>[].obs;
@@ -24,20 +25,20 @@ class NotificationViewModel extends GetxController {
       return;
     }
 
-    isLoading.value = true;
+    setLoading(true);
     final result = await _friendService.acceptFriendRequest(
       requestId,
       userId!,
       status,
     );
-    isLoading.value = false;
+    setLoading(false);
 
     result.fold(
       (failure) {
-        Get.snackbar('Lỗi', failure.message);
+        showError(failure.message);
       },
       (message) async {
-        Get.snackbar('Thành công', message);
+        showSuccess(message);
         await Future.delayed(const Duration(seconds: 2));
         _getFriendRequests(); // Cập nhật lại danh sách sau khi xử lý
       },
@@ -50,9 +51,9 @@ class NotificationViewModel extends GetxController {
       return;
     }
 
-    isLoading.value = true;
+    setLoading(true);
     final result = await _friendService.getFriendRequests(userId!);
-    isLoading.value = false;
+    setLoading(false);
 
     result.fold(
       (failure) {
@@ -62,5 +63,10 @@ class NotificationViewModel extends GetxController {
         friendRequests.assignAll(requests); // Gán lại danh sách từ API
       },
     );
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

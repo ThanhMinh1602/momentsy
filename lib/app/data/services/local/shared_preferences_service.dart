@@ -19,7 +19,6 @@ class SharedPreferencesService {
     await _prefs?.clear();
   }
 
-  // Thêm phương thức lưu token
   static Future<void> setToken(String token) async {
     await _prefs?.setString('token', token);
   }
@@ -28,7 +27,6 @@ class SharedPreferencesService {
     return _prefs?.getString('token');
   }
 
-  // Thêm phương thức lưu userId
   static Future<void> setUserId(String userId) async {
     await _prefs?.setString('user_id', userId);
   }
@@ -36,6 +34,4 @@ class SharedPreferencesService {
   static String? getUserId() {
     return _prefs?.getString('user_id');
   }
-
-  static String get getUserIds => _prefs?.getString('user_id') ?? '';
 }

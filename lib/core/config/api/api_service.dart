@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:momentsy/core/exception/dio_exception.dart';
+import 'package:momentsy/core/exceptions/dio_exception.dart';
 
 abstract class ApiService with DioExceptionMixin {
   late Dio _dio;

@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 import 'package:momentsy/app/data/services/remote/file_service.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class CameraViewModel extends GetxController {
+class CameraViewModel extends BaseViewModel {
   CameraViewModel({required FileService fileService})
     : _fileService = fileService;
 
@@ -24,7 +25,6 @@ class CameraViewModel extends GetxController {
   Rx<double> maxZoom = 1.0.obs;
   Rx<FlashMode> flashMode = FlashMode.auto.obs;
   RxString imagePath = ''.obs;
-  Rx<bool> isLoading = false.obs;
   RxBool isFocusing = false.obs;
   RxBool isMirrorMode = false.obs;
   RxBool isRearCamera = false.obs;
@@ -259,30 +259,15 @@ class CameraViewModel extends GetxController {
   Future<void> sendFile() async {
     if (imagePath.value.isEmpty) return;
 
-    isLoading.value = true;
+    setLoading(true);
     final result = await _fileService.fileUpload(File(imagePath.value));
-    isLoading.value = false;
+    setLoading(false);
 
-    result.fold(
-      (l) => Get.snackbar(
-        'Lỗi',
-        l.message,
-        backgroundColor: Colors.red.withOpacity(0.8),
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      ),
-      (r) {
-        imagePath.value = '';
-        Get.snackbar(
-          'Thành công',
-          'Ảnh đã được đăng lên',
-          backgroundColor: AppColor.primary.withOpacity(0.8),
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-        Get.offAllNamed(AppRoutes.MAIN);
-      },
-    );
+    result.fold((l) => showError(l.message), (r) {
+      imagePath.value = '';
+      showSuccess(r.message);
+      Get.offAllNamed(AppRoutes.MAIN);
+    });
   }
 
   /// Adjust zoom level within the allowed range

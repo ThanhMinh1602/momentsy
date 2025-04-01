@@ -6,70 +6,71 @@ import 'package:momentsy/app/data/body/reset_password_body.dart';
 import 'package:momentsy/app/data/body/verify_otp_body.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/auth_service.dart';
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class AuthViewModel extends GetxController {
+class AuthViewModel extends BaseViewModel {
   final AuthService _authService;
-  RxBool isLoading = false.obs;
 
   AuthViewModel({required AuthService authService})
     : _authService = authService;
 
   Future<void> register(RegisterBody registerBody) async {
-    isLoading.value = true;
+    setLoading(true);
     final result = await _authService.register(registerBody);
-    isLoading.value = false;
+    setLoading(false);
 
-    result.fold((failure) => Get.snackbar("Lỗi", failure.message), (message) {
-      Get.snackbar("Thành công", message);
+    result.fold((failure) => showError(failure.message), (r) {
+      showSuccess(r.message);
       Get.offAndToNamed(AppRoutes.LOGIN, arguments: registerBody.email);
     });
   }
 
   Future<void> login(LoginBody loginBody) async {
-    isLoading.value = true;
+    setLoading(true);
     final result = await _authService.login(loginBody);
-    isLoading.value = false;
+    setLoading(false);
 
-    result.fold((failure) => Get.snackbar("Lỗi", failure.message), (r) async {
-      print('Data Response: ${r.token}, ${r.user?.id}');
+    result.fold((failure) => showError(failure.message), (r) async {
+      print('Data Response: ${r.data?.token}, ${r.data?.user?.id}');
 
-      await SharedPreferencesService.setToken(r.token ?? '');
-      await SharedPreferencesService.setUserId(r.user?.id ?? '');
+      await SharedPreferencesService.setToken(r.data?.token ?? '');
+      await SharedPreferencesService.setUserId(r.data?.user?.id ?? '');
       Get.offAndToNamed(AppRoutes.MAIN);
     });
   }
 
   Future<void> forgotPassword(String email) async {
-    isLoading.value = true;
+    setLoading(true);
     final result = await _authService.sendOtp(email);
-    isLoading.value = false;
-    result.fold((failure) => Get.snackbar("Lỗi", failure.message), (message) {
-      Get.snackbar("Thành công", message);
+    setLoading(false);
+    result.fold((l) => showError(l.message), (r) {
+      showSuccess(r.message);
       Get.toNamed(AppRoutes.CONFIRMOTP, arguments: email);
     });
   }
 
   Future<void> verifyOtp(VerifyOtpBody body) async {
-    isLoading.value = true;
+    setLoading(true);
     final result = await _authService.verifyOtp(body);
-    isLoading.value = false;
+    setLoading(false);
     result.fold(
       (l) {
-        Get.snackbar("Lỗi", l.message);
+        showError(l.message);
       },
       (r) {
-        Get.snackbar("Thành công", r.message);
-        Get.toNamed(AppRoutes.RESETPASSWORD, arguments: r.resetToken);
+        showSuccess(r.message);
+        print('Reset Token: ${r.data?.resetToken}');
+        Get.toNamed(AppRoutes.RESETPASSWORD, arguments: r.data?.resetToken);
       },
     );
   }
 
   Future<void> resetPassword(ResetPasswordBody body) async {
-    isLoading.value = true;
+    setLoading(true);
     final result = await _authService.resetPassword(body);
-    isLoading.value = false;
-    result.fold((failure) => Get.snackbar("Lỗi", failure.message), (message) {
-      Get.snackbar("Thành công", message);
+    setLoading(false);
+    result.fold((failure) => showError(failure.message), (r) {
+      showSuccess(r.message);
       Get.offAndToNamed(AppRoutes.LOGIN);
     });
   }

@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/friend_service.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class SettingViewModel extends GetxController {
+class SettingViewModel extends BaseViewModel {
   final FriendService _friendService;
   final String? userId = SharedPreferencesService.getUserId();
-  RxBool isLoading = false.obs;
   RxString qrResult = ''.obs;
   RxBool isProcessing = false.obs;
   SettingViewModel({required FriendService friendService})
@@ -18,23 +18,23 @@ class SettingViewModel extends GetxController {
 
   Future<void> sendFriendRequest(String receiverId) async {
     if (userId != null) {
-      isLoading.value = true;
+      setLoading(true);
       final result = await _friendService.sendFriendRequest(
         userId!,
         receiverId,
       );
-      isLoading.value = false;
+      setLoading(false);
       Get.back();
       result.fold(
         (l) {
-          Get.snackbar('Lỗi', l.message);
+          showError(l.message);
         },
         (r) {
-          Get.snackbar('Thành công', r);
+          showSuccess(r);
         },
       );
     } else {
-      Get.snackbar('Cảnh báo', 'Vui lòng đăng nhập');
+      showError('Vui lòng đăng nhập');
     }
   }
 }

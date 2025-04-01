@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:momentsy/core/config/api/api_endpoint.dart';
 import 'package:momentsy/core/config/api/api_service.dart';
-import 'package:momentsy/core/exception/failure.dart';
+import 'package:momentsy/core/exceptions/failure.dart';
 import 'package:momentsy/app/data/models/friend_request_model.dart';
 
 abstract class IFriendService {

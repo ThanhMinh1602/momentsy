@@ -12,6 +12,9 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/appicon.png
+  AssetGenImage get appicon => const AssetGenImage('assets/icons/appicon.png');
+
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
 
@@ -43,7 +46,8 @@ class $AssetsIconsGen {
   String get textSquare => 'assets/icons/text-square.svg';
 
   /// List of all assets
-  List<String> get values => [
+  List<dynamic> get values => [
+    appicon,
     apple,
     arrowBack,
     facebook,

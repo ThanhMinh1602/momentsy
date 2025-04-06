@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:momentsy/app/data/services/local/notification_service.dart';
 import 'package:momentsy/app/features/setting/viewmodels/setting_view_model.dart';
 import 'package:momentsy/app/features/setting/views/widgets/setting_item.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
-import 'package:momentsy/core/constants/app_style.dart';
-import 'package:momentsy/core/widgets/card/custom_app_card.dart';
 import 'package:momentsy/core/widgets/dialog/custom_dialog.dart';
+import 'package:momentsy/gen/assets.gen.dart';
 
-class SettingPage extends StatelessWidget {
-  SettingPage({super.key});
+class SettingScreen extends StatelessWidget {
+  SettingScreen({super.key});
   final _settingViewModel = Get.find<SettingViewModel>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
-      appBar: AppBar(title: Text('Cài đặt'), elevation: 0),
+      appBar: AppBar(
+        title: Text('Cài đặt'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: EdgeInsets.all(space12),
         child: Column(
@@ -95,39 +97,42 @@ class SettingPage extends StatelessWidget {
   }
 
   Widget _buildUserProfile() {
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.PROFILE),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://cdn.pixabay.com/photo/2016/08/11/17/46/hoian-1586344_1280.jpg',
+    return Obx(
+      () => GestureDetector(
+        onTap: () => Get.toNamed(AppRoutes.PROFILE),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage:
+                  _settingViewModel.user.value.avatar != null
+                      ? NetworkImage(_settingViewModel.user.value.avatar!)
+                      : AssetImage(Assets.images.avatarNull.path),
+              radius: 30,
+              backgroundColor: AppColor.primaryLight,
             ),
-            radius: 30,
-            backgroundColor: AppColor.primaryLight,
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Nguyễn Thanh Minh',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.textPrimary,
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _settingViewModel.user.value.name ?? 'Unknown',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.textPrimary,
+                    ),
                   ),
-                ),
-                Text(
-                  'ntminh16201@gmail.com',
-                  style: TextStyle(color: AppColor.textSecondary),
-                ),
-              ],
+                  Text(
+                    _settingViewModel.user.value.email ?? 'Unknown',
+                    style: TextStyle(color: AppColor.textSecondary),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Icon(Icons.arrow_forward_ios, size: 16, color: AppColor.grey),
-        ],
+            Icon(Icons.arrow_forward_ios, size: 16, color: AppColor.grey),
+          ],
+        ),
       ),
     );
   }

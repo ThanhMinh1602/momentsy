@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/widgets/button/custom_button.dart';
 
 class CustomDialog extends StatelessWidget {
   final String title;
@@ -7,6 +8,7 @@ class CustomDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final String? cancelText;
   final String? confirmText;
+  final bool isLoading;
 
   const CustomDialog({
     super.key,
@@ -15,6 +17,7 @@ class CustomDialog extends StatelessWidget {
     required this.onConfirm,
     this.cancelText = 'Hủy',
     this.confirmText = 'Xác nhận',
+    this.isLoading = false,
   });
 
   @override
@@ -45,20 +48,15 @@ class CustomDialog extends StatelessWidget {
           ),
           child: Text(cancelText!, style: TextStyle(fontSize: 16)),
         ),
-        ElevatedButton(
+        CustomButton(
+          isLoading: isLoading,
           onPressed: () {
             onConfirm();
-            Navigator.of(context).pop();
+            if (isLoading == false) {
+              Navigator.of(context).pop();
+            }
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColor.primary,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          ),
-          child: Text(confirmText!, style: TextStyle(fontSize: 16)),
+          btnText: 'Ok',
         ),
       ],
       actionsAlignment: MainAxisAlignment.spaceBetween,

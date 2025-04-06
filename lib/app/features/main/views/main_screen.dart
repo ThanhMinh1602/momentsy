@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
           HomeScreen(),
           ChatScreen(),
           NotificationScreen(),
-          SettingPage(),
+          SettingScreen(),
         ],
       ),
       bottomNavigationBar: Theme(

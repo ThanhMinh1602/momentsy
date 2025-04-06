@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:momentsy/app/data/models/base_list_model.dart';
+import 'package:momentsy/app/data/models/base/base_list_model.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/core/config/api/api_endpoint.dart';
 import 'package:momentsy/core/config/api/api_service.dart';
 import 'package:momentsy/core/exceptions/failure.dart';
 import 'package:momentsy/app/data/models/image_model.dart';
-import 'package:momentsy/app/data/models/base_model.dart';
+import 'package:momentsy/app/data/models/base/base_model.dart';
 
 abstract class IFileService {
   Future<Either<Failure, BaseModel>> fileUpload(File file);

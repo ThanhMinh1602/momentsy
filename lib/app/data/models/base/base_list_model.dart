@@ -1,4 +1,4 @@
-import 'package:momentsy/app/data/models/base_model.dart';
+import 'package:momentsy/app/data/models/base/base_model.dart';
 
 class BaseListModel<T> extends BaseModel<List<T>> {
   BaseListModel({
@@ -17,8 +17,8 @@ class BaseListModel<T> extends BaseModel<List<T>> {
       success: json['success'] as bool? ?? false,
       message: json['message'] as String? ?? '',
       data:
-          json['data'] != null && json['data'] is List
-              ? (json['data'] as List)
+          json['data']['body'] != null && json['data']['body'] is List
+              ? (json['data']['body'] as List)
                   .map((item) => itemFromJson(item as Map<String, dynamic>))
                   .toList()
               : null,

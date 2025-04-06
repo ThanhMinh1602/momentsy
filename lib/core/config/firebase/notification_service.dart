@@ -2,6 +2,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
 
@@ -24,9 +27,11 @@ class NotificationService {
   Future<void> _setupLocalNotifications() async {
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-
+    const DarwinInitializationSettings iosSettings =
+        DarwinInitializationSettings();
     const InitializationSettings settings = InitializationSettings(
       android: androidSettings,
+      iOS: iosSettings,
     );
 
     await _localNotifications.initialize(settings);
@@ -34,7 +39,9 @@ class NotificationService {
 
   /// Lấy Token FCM và gửi lên Server
   Future<void> _getToken() async {
-    _deviceToken = await _firebaseMessaging.getToken();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      _deviceToken = await _firebaseMessaging.getToken();
+    }
   }
 
   String? getDeviceToken() => _deviceToken;
@@ -72,9 +79,14 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.high,
     );
-
+    var iOSDetails = const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
     var generalNotificationDetails = NotificationDetails(
       android: androidDetails,
+      iOS: iOSDetails,
     );
 
     await _localNotifications.show(0, title, body, generalNotificationDetails);

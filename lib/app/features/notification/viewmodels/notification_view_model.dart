@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/models/friend_request_model.dart';
-import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/friend_service.dart';
 import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
@@ -9,7 +8,6 @@ class NotificationViewModel extends BaseViewModel {
     : _friendService = friendService;
 
   final FriendService _friendService;
-  final String? userId = SharedPreferencesService.getUserId();
   RxList<FriendRequestModel> friendRequests = <FriendRequestModel>[].obs;
   RxBool isLoading = false.obs;
 
@@ -34,11 +32,11 @@ class NotificationViewModel extends BaseViewModel {
     setLoading(false);
 
     result.fold(
-      (failure) {
-        showError(failure.message);
+      (l) {
+        showError(l.message);
       },
-      (message) async {
-        showSuccess(message);
+      (r) async {
+        showSuccess(r.message);
         await Future.delayed(const Duration(seconds: 2));
         _getFriendRequests(); // Cập nhật lại danh sách sau khi xử lý
       },
@@ -56,11 +54,11 @@ class NotificationViewModel extends BaseViewModel {
     setLoading(false);
 
     result.fold(
-      (failure) {
-        print('Lỗi: ${failure.message}');
+      (l) {
+        showError(l.message);
       },
-      (requests) {
-        friendRequests.assignAll(requests); // Gán lại danh sách từ API
+      (r) {
+        friendRequests.assignAll(r.data ?? []); // Gán lại danh sách từ API
       },
     );
   }

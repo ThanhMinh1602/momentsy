@@ -4,6 +4,12 @@ import 'package:momentsy/app/features/setting/viewmodels/setting_view_model.dart
 class SettingBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => SettingViewModel(friendService: Get.find()));
+    Get.lazyPut(
+      () => SettingViewModel(
+        friendService: Get.find(),
+        userService: Get.find(),
+        authService: Get.find(),
+      ),
+    );
   }
 }

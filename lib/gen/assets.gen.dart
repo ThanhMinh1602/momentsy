@@ -76,12 +76,26 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [avatarNull, imageNull];
 }
 
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/add_first_image.json
+  String get addFirstImage => 'assets/lotties/add_first_image.json';
+
+  /// File path: assets/lotties/swipe_right.json
+  String get swipeRight => 'assets/lotties/swipe_right.json';
+
+  /// List of all assets
+  List<String> get values => [addFirstImage, swipeRight];
+}
+
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
 
   /// List of all assets
   static List<String> get values => [aEnv];

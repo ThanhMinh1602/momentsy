@@ -23,54 +23,24 @@ class CameraScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColor.black,
         resizeToAvoidBottomInset: false,
         body: Obx(() {
           if (!_appCameraController.isCameraInitialized.value) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(
-                      color: AppColor.primary,
-                      strokeWidth: 3,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Đang khởi tạo camera...",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ],
-              ),
-            );
+            return Center(child: CircularProgressIndicator());
           }
-
-          return AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            child: Container(
-              key: ValueKey<String>(_appCameraController.imagePath.value),
-              width: context.getWidth,
-              height: context.getHeight,
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child:
-                  _appCameraController.imagePath.value.isNotEmpty
-                      ? TakePictureResult(
-                        imagePath: _appCameraController.imagePath.value,
-                        onEditingComplete: (String imagePath) {
-                          _appCameraController.imagePath.value = imagePath;
-                        },
-                      )
-                      : CameraViewWidget(
-                        appCameraController: _appCameraController,
-                      ),
-            ),
+          return Container(
+            width: context.getWidth,
+            height: context.getHeight,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child:
+                _appCameraController.imagePath.value.isNotEmpty
+                    ? TakePictureResult(
+                      appCameraController: _appCameraController,
+                    )
+                    : CameraViewWidget(
+                      appCameraController: _appCameraController,
+                    ),
           );
         }),
       ),

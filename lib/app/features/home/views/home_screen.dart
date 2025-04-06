@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:momentsy/app/features/home/viewmodels/home_view_model.dart';
 import 'package:momentsy/app/features/home/views/widgets/status_card.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
+import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/extension/build_context_extension.dart';
 import 'package:momentsy/core/widgets/textfield/custom_send_message_field.dart';
 import 'package:get/get.dart';
+import 'package:momentsy/gen/assets.gen.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,44 +55,70 @@ class _HomeScreenState extends State<HomeScreen> {
                             Get.toNamed(AppRoutes.CAMERA);
                           }
                         },
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: PreloadPageView.builder(
-                                  key: PageStorageKey("pageView"),
-                                  controller: _pageController,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: homeController.images.length,
-                                  preloadPagesCount: 10,
-                                  physics: BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    final story = homeController.images[index];
-                                    return AnimatedContainer(
-                                      duration: Duration(milliseconds: 300),
-                                      decoration: BoxDecoration(
+                        child:
+                            homeController.images.isEmpty
+                                ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Lottie.asset(
+                                        Assets.lotties.addFirstImage,
+                                        width: context.getWidth / 2.5,
+                                      ),
+                                      Text(
+                                        'Vuốt sang phải để thêm hình',
+                                        style: AppStyle.bold12,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : Column(
+                                  children: [
+                                    Expanded(
+                                      child: ClipRRect(
                                         borderRadius: BorderRadius.circular(16),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColor.shadow,
-                                            blurRadius: 10,
-                                            spreadRadius: 2,
-                                          ),
-                                        ],
+                                        child: PreloadPageView.builder(
+                                          key: PageStorageKey("pageView"),
+                                          controller: _pageController,
+                                          scrollDirection: Axis.vertical,
+                                          itemCount:
+                                              homeController.images.length,
+                                          preloadPagesCount: 10,
+                                          physics: BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            final story =
+                                                homeController.images[index];
+                                            return AnimatedContainer(
+                                              duration: Duration(
+                                                milliseconds: 300,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: AppColor.shadow,
+                                                    blurRadius: 10,
+                                                    spreadRadius: 2,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Center(
+                                                child: StatusCardWidget(
+                                                  story: story,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                      child: Center(
-                                        child: StatusCardWidget(story: story),
-                                      ),
-                                    );
-                                  },
+                                    ),
+                                    SizedBox(height: 12),
+                                    CustomSendMessageField(),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                            CustomSendMessageField(),
-                          ],
-                        ),
                       ),
                     ),
           ),

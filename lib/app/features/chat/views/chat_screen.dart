@@ -1,8 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:momentsy/app/features/chat/viewmodels/chat_view_model.dart';
+import 'package:momentsy/app/features/chat/views/widgets/chat_view.dart';
+import 'package:momentsy/app/features/chat/views/widgets/friend_list.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/constants/app_dimensions.dart';
+import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/widgets/tabbar/custom_tab_bar.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+  late TabController tabController;
+  final _controller = Get.find<ChatViewModel>();
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,55 +32,28 @@ class ChatScreen extends StatelessWidget {
       backgroundColor: AppColor.background,
       appBar: AppBar(
         title: Text('Chats'),
-        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
-        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: AppColor.cardLight,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.chat_bubble_outline,
-                size: 64,
-                color: AppColor.secondary,
-              ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: 12.0,
             ),
-            SizedBox(height: 24),
-            Text(
-              'No conversations yet',
-              style: TextStyle(
-                color: AppColor.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            child: CustomTabBar(
+              tabController: tabController,
+              tabsTitle: ['Tin nhắn', 'Bạn bè'],
             ),
-            SizedBox(height: 8),
-            Text(
-              'Start chatting with your friends',
-              style: TextStyle(color: AppColor.textSecondary, fontSize: 16),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: [ChatList(), FriendList(chatViewModel: _controller)],
             ),
-            SizedBox(height: 32),
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: Icon(Icons.add),
-              label: Text('New message'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColor.secondary,
-        child: Icon(Icons.chat),
+          ),
+        ],
       ),
     );
   }

@@ -8,14 +8,14 @@ class CustomButton extends StatelessWidget {
     this.onPressed,
     required this.btnText,
     this.isLoading = false,
-    this.isPrimary = true,
+    this.isGradient = false,
     this.icon,
     this.gradientColors,
   });
   final void Function()? onPressed;
   final String btnText;
   final bool isLoading;
-  final bool isPrimary;
+  final bool isGradient;
   final Widget? icon;
   final List<Color>? gradientColors;
 
@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient:
-            isPrimary
+            isGradient
                 ? LinearGradient(
                   colors: gradientColors ?? defaultGradient,
                   begin: Alignment.topLeft,
@@ -34,11 +34,13 @@ class CustomButton extends StatelessWidget {
                 )
                 : null,
         borderRadius: BorderRadius.circular(16.0),
-        color: isPrimary ? null : AppColor.cardLight,
+        color: isGradient ? null : AppColor.primary,
         boxShadow: [
           BoxShadow(
             color:
-                isPrimary ? AppColor.primary.withOpacity(0.2) : AppColor.shadow,
+                isGradient
+                    ? AppColor.primary.withOpacity(0.2)
+                    : AppColor.shadow,
             blurRadius: 8,
             offset: Offset(0, 4),
           ),
@@ -49,7 +51,7 @@ class CustomButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           backgroundColor: Colors.transparent,
-          foregroundColor: isPrimary ? AppColor.white : AppColor.textPrimary,
+          foregroundColor: isGradient ? AppColor.white : AppColor.textPrimary,
           minimumSize: Size(double.infinity, 56),
           elevation: 0,
           shadowColor: Colors.transparent,
@@ -63,7 +65,7 @@ class CustomButton extends StatelessWidget {
                   height: 24,
                   width: 24,
                   child: CircularProgressIndicator(
-                    color: isPrimary ? Colors.white : AppColor.primary,
+                    color: isGradient ? Colors.white : AppColor.primary,
                     strokeWidth: 2,
                   ),
                 )
@@ -75,7 +77,7 @@ class CustomButton extends StatelessWidget {
                       btnText,
                       style: TextStyle(
                         color:
-                            isPrimary ? AppColor.white : AppColor.textPrimary,
+                            isGradient ? AppColor.white : AppColor.textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),

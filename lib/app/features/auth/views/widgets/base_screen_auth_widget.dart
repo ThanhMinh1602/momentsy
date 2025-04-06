@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/widgets/background/custom_background.dart';
+import 'package:get/get.dart';
 
 class BaseScreenAuthWidget extends StatelessWidget {
   const BaseScreenAuthWidget({super.key, required this.child});
@@ -15,6 +16,32 @@ class BaseScreenAuthWidget extends StatelessWidget {
         body: Stack(
           children: [
             CustomBackground(),
+            Positioned(
+              top: MediaQuery.of(context).padding.top + space12,
+              left: space12,
+              child: GestureDetector(
+                onTap: () => Get.back(),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColor.surface,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColor.shadow,
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    color: AppColor.textPrimary,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
             Center(
               child: Container(
                 width: double.infinity,

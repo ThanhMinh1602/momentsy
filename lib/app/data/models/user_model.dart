@@ -6,7 +6,6 @@ class UserModel {
 
   UserModel({this.id, this.name, this.email, this.avatar});
 
-  // ✅ Chuyển JSON thành object
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as String?,
@@ -16,7 +15,6 @@ class UserModel {
     );
   }
 
-  // ✅ Chuyển object thành JSON
   Map<String, dynamic> toJson() {
     return {'id': id, 'name': name, 'email': email, 'avatar': avatar};
   }

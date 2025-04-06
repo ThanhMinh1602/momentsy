@@ -18,241 +18,127 @@ class CameraViewWidget extends StatelessWidget {
         Expanded(
           child: Stack(
             children: [
-              // Camera Preview
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Obx(
-                  () => Transform(
+              GestureDetector(
+                onHorizontalDragEnd: (details) {
+                  if (details.primaryVelocity! < -1000) {
+                    Get.back();
+                  }
+                },
+                onScaleStart:
+                    (details) => baseZoom = appCameraController.zoomLevel.value,
+                onScaleUpdate:
+                    (details) => appCameraController.updateZoom(
+                      baseZoom * details.scale,
+                    ),
+                onTapUp:
+                    (details) => appCameraController.focusOnPoint(
+                      details,
+                      MediaQuery.of(context).size,
+                    ),
+                onDoubleTap: appCameraController.switchCamera,
+                child: Obx(() {
+                  final isFrontCamera = appCameraController.isFrontCamera.value;
+                  return Transform(
                     alignment: Alignment.center,
-                    transform: Matrix4.rotationY(
-                      !appCameraController.isRearCamera.value ? 3.14159 : 0,
+                    transform:
+                        Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(isFrontCamera ? 3.14159 : 0),
+                    child: CameraPreview(
+                      appCameraController.cameraController.value!,
                     ),
-                    child: GestureDetector(
-                      onHorizontalDragEnd: (details) {
-                        if (details.primaryVelocity! < -1000) {
-                          Get.back();
-                        }
-                      },
-                      onScaleStart:
-                          (details) =>
-                              baseZoom = appCameraController.zoomLevel.value,
-                      onScaleUpdate:
-                          (details) => appCameraController.updateZoom(
-                            baseZoom * details.scale,
-                          ),
-                      onTapUp:
-                          (details) => appCameraController.focusOnPoint(
-                            details,
-                            MediaQuery.of(context).size,
-                          ),
-                      onDoubleTap: appCameraController.switchCamera,
-                      child: CameraPreview(
-                        appCameraController.cameraController.value!,
-                      ),
-                    ),
-                  ),
-                ),
+                  );
+                }),
               ),
-
-              // Focus Point Indicator
+              // Focus point indicator
               Obx(() {
                 final focusPoint = appCameraController.focusPoint.value;
                 return focusPoint != null
                     ? Positioned(
-                      left: focusPoint.dx - 25,
-                      top: focusPoint.dy - 25,
-                      child: AnimatedOpacity(
-                        opacity:
-                            appCameraController.isFocusing.value ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 200),
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColor.primary,
-                              width: 2,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.center_focus_strong,
-                            color: AppColor.primary,
-                            size: 24,
-                          ),
+                      left: focusPoint.dx - 20,
+                      top: focusPoint.dy - 20,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.yellow, width: 2),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: const Icon(
+                          Icons.center_focus_weak_outlined,
+                          color: Colors.yellow,
+                          size: 40,
                         ),
                       ),
                     )
-                    : SizedBox.shrink();
+                    : const SizedBox.shrink();
               }),
-
-              // Top Controls
-              SafeArea(
-                child: Padding(
+              // Top controls
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.7),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Flash Controls
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(20),
+                      IconButton(
+                        onPressed: appCameraController.switchCamera,
+                        icon: const Icon(
+                          Icons.flip_camera_ios,
+                          color: AppColor.white,
                         ),
-                        child: Obx(
-                          () => IconButton(
-                            onPressed: appCameraController.toggleFlash,
-                            icon: Icon(
-                              appCameraController.flashMode.value ==
-                                      FlashMode.off
-                                  ? Icons.flash_off
-                                  : (appCameraController.flashMode.value ==
-                                          FlashMode.always
-                                      ? Icons.flash_on
-                                      : Icons.flash_auto),
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            tooltip: 'Flash Mode',
-                          ),
-                        ),
+                        iconSize: 28,
                       ),
-
-                      // Close Camera Button
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: IconButton(
-                          onPressed: Get.back,
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          tooltip: 'Close Camera',
-                        ),
+                      IconButton(
+                        onPressed: Get.back,
+                        icon: const Icon(Icons.close, color: AppColor.white),
+                        iconSize: 28,
                       ),
                     ],
                   ),
                 ),
               ),
-
-              // Zoom Slider
-              Positioned(
-                bottom: 24.0,
-                left: 20,
-                right: 20,
-                child: Row(
-                  children: [
-                    Icon(Icons.zoom_out, color: Colors.white),
-                    Expanded(
-                      child: Obx(
-                        () => SliderTheme(
-                          data: SliderThemeData(
-                            trackHeight: 3,
-                            activeTrackColor: AppColor.primary,
-                            inactiveTrackColor: Colors.white.withOpacity(0.3),
-                            thumbColor: AppColor.accent,
-                            thumbShape: RoundSliderThumbShape(
-                              enabledThumbRadius: 8,
-                            ),
-                            overlayShape: RoundSliderOverlayShape(
-                              overlayRadius: 16,
-                            ),
-                            overlayColor: AppColor.primary.withOpacity(0.2),
-                          ),
-                          child: Slider(
-                            value: appCameraController.zoomLevel.value,
-                            min: appCameraController.minZoom.value,
-                            max: appCameraController.maxZoom.value,
-                            onChanged: appCameraController.updateZoom,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.zoom_in, color: Colors.white),
-                  ],
-                ),
-              ),
-
-              // Camera Switch Button
-              Positioned(
-                bottom: 80.0,
-                right: 20,
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.black38,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: InkWell(
-                    onTap: appCameraController.switchCamera,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Obx(
-                          () => Icon(
-                            appCameraController.isRearCamera.value
-                                ? Icons.camera_rear
-                                : Icons.camera_front,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          'Đổi camera',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              // Zoom Level Indicator
-              Positioned(
-                bottom: 60,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Obx(
-                    () => AnimatedOpacity(
-                      opacity:
-                          appCameraController.zoomLevel.value > 1.1 ? 1.0 : 0.0,
-                      duration: Duration(milliseconds: 200),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black54,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          '${appCameraController.zoomLevel.value.toStringAsFixed(1)}x',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // // Zoom slider
+              // Positioned(
+              //   bottom: 100,
+              //   left: 20,
+              //   right: 20,
+              //   child: Container(
+              //     height: 40,
+              //     decoration: BoxDecoration(
+              //       color: Colors.black.withOpacity(0.5),
+              //       borderRadius: BorderRadius.circular(20),
+              //     ),
+              //     child: SliderTheme(
+              //       data: SliderThemeData(
+              //         activeTrackColor: AppColor.white,
+              //         inactiveTrackColor: Colors.white.withOpacity(0.3),
+              //         thumbColor: AppColor.white,
+              //         overlayColor: Colors.white.withOpacity(0.2),
+              //       ),
+              //       child: Slider(
+              //         value: appCameraController.zoomLevel.value,
+              //         min: appCameraController.minZoom.value,
+              //         max: appCameraController.maxZoom.value,
+              //         onChanged: appCameraController.updateZoom,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

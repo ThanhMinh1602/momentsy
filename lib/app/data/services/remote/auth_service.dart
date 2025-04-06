@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dartz/dartz.dart';
-import 'package:momentsy/app/data/models/base_model.dart';
+import 'package:momentsy/app/data/models/base/base_model.dart';
 import 'package:momentsy/core/config/api/api_endpoint.dart';
 import 'package:momentsy/core/config/api/api_service.dart';
 import 'package:momentsy/core/exceptions/failure.dart';
@@ -19,6 +19,7 @@ abstract class IAuthService {
     VerifyOtpBody body,
   );
   Future<Either<Failure, BaseModel>> resetPassword(ResetPasswordBody body);
+  Future<Either<Failure, BaseModel>> logout(String userId);
 }
 
 class AuthService extends ApiService implements IAuthService {
@@ -95,6 +96,18 @@ class AuthService extends ApiService implements IAuthService {
         ApiEndpoint.resetPassword,
         data: body.toJson(),
       );
+      return Right(BaseModel.fromJson(response.data));
+    } on DioException catch (e) {
+      return Left(handleDioException(e));
+    } catch (e) {
+      return Left(Failure("Lỗi không mong muốn: ${e.toString()}"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BaseModel>> logout(String userId) async {
+    try {
+      final response = await post(ApiEndpoint.logout, data: {'userId': userId});
       return Right(BaseModel.fromJson(response.data));
     } on DioException catch (e) {
       return Left(handleDioException(e));

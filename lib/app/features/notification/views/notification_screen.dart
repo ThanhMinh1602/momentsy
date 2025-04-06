@@ -13,8 +13,8 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.background,
       body:
-          notifiController.isLoading.value
-              ? Center(child: CircularProgressIndicator())
+          notifiController.friendRequests.isEmpty
+              ? Center(child: Text('Không có yêu cầu kết bạn nào'))
               : Obx(
                 () => ListView.separated(
                   padding: EdgeInsets.all(
@@ -36,11 +36,13 @@ class NotificationScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: space12),
-                          Text(
-                            request.senderBy?.name ?? '',
-                            style: TextStyle(color: AppColor.white),
+                          Expanded(
+                            child: Text(
+                              request.senderBy?.name ?? '',
+                              style: TextStyle(color: AppColor.white),
+                            ),
                           ),
-                          Spacer(),
+                          SizedBox(width: space12),
                           IconButton(
                             icon: Icon(Icons.check, color: AppColor.success),
                             onPressed: () {

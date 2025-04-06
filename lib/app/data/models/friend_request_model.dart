@@ -1,5 +1,18 @@
 import 'package:momentsy/app/data/models/user_model.dart';
 
+// {
+//                 "id": "67eca209cbddf1a2e471599e",
+//                 "senderBy": {
+//                     "id": "67dd7e8019a554147cde2f72",
+//                     "name": "ntminh16201.9@gmail.com ntminh16201.9@gmail.com",
+//                     "email": "ntminh16201.9@gmail.com",
+//                     "avatar": null
+//                 },
+//                 "receiverId": "67dc081d2570963735534207",
+//                 "status": "pending",
+//                 "createdAt": "2025-04-02T02:33:45.994Z",
+//                 "updatedAt": "2025-04-02T02:33:45.994Z"
+//             },
 class FriendRequestModel {
   final String? id;
   final UserModel? senderBy;

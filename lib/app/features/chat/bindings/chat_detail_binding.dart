@@ -4,6 +4,11 @@ import 'package:momentsy/app/features/chat/viewmodels/chat_detail_view_model.dar
 class ChatDetailBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ChatDetailViewModel());
+    Get.lazyPut(
+      () => ChatDetailViewModel(
+        socketService: Get.find(),
+        chatService: Get.find(),
+      ),
+    );
   }
 }

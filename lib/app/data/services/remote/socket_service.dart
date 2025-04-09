@@ -12,6 +12,9 @@ class SocketService {
     });
 
     socket.connect();
+    socket.onConnect((_) => print('✅ Socket connected'));
+    socket.onDisconnect((_) => print('❌ Socket disconnected'));
+    socket.onError((data) => print('🚨 Socket error: $data'));
   }
 
   void on(String eventName, Function(dynamic data) handler) {

@@ -21,7 +21,7 @@ Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
-  //set up ở đây để dùng cho timeago cho card trong home
+  //set up ở đây để dùng cho timeago cho card trong homeyou
   timeago.setLocaleMessages('vi', timeago.ViMessages());
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

@@ -9,7 +9,7 @@ abstract class BaseViewModel extends GetxController {
 
   String get userId {
     if (_userId != null) {
-      return _userId!;
+      return _userId;
     } else {
       showError('Chưa đăng nhập');
       return '';

@@ -21,10 +21,6 @@ class ChatViewModel extends BaseViewModel {
   }
 
   Future<void> _getFriendList() async {
-    if (userId == null) {
-      Get.snackbar('Chưa đăng nhập', 'Vui lòng đăng nhập');
-      return;
-    }
     setLoading(true);
     final result = await _friendService.getFirendList(userId!);
     setLoading(false);

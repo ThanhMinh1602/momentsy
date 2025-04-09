@@ -9,7 +9,7 @@ class ApiEndpoint {
   static String allImage = "/file/list-images";
   static String getUserById = "/user";
   //Chat
-  static String sendChat = "/chat";
+  static String getConversation = "/chat";
 
   //Friend
   static String sendFriendRequest = "/friend/send-friend-request";

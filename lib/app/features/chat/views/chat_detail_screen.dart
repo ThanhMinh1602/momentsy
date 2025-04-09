@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:momentsy/app/features/chat/viewmodels/chat_detail_view_model.dart';
-import 'package:momentsy/app/features/chat/viewmodels/chat_view_model.dart';
 
 class ChatDetailScreen extends StatelessWidget {
   ChatDetailScreen({super.key});
   final ChatDetailViewModel controller = Get.find();
   final TextEditingController _messageController = TextEditingController();
-  final String receiverId = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat với $receiverId')),
+      appBar: AppBar(title: Text('Chat với ${controller.receiverId}')),
       body: Column(
         children: [
           Expanded(
@@ -22,14 +20,17 @@ class ChatDetailScreen extends StatelessWidget {
                 itemCount: controller.messages.length,
                 itemBuilder: (context, index) {
                   final message = controller.messages[index];
-                  final isMe =
-                      message.senderId == controller.messages[index].senderId;
+                  final isMe = message.senderId == controller.userId;
+
                   return Align(
                     alignment:
                         isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      padding: EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: isMe ? Colors.blue[100] : Colors.grey[200],
                         borderRadius: BorderRadius.circular(10),
@@ -41,10 +42,13 @@ class ChatDetailScreen extends StatelessWidget {
                                 : CrossAxisAlignment.start,
                         children: [
                           Text(message.content),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text(
                             DateFormat('HH:mm').format(message.timestamp),
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -55,26 +59,23 @@ class ChatDetailScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Nhập tin nhắn...',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     if (_messageController.text.isNotEmpty) {
-                      controller.sendMessage(
-                        receiverId,
-                        _messageController.text,
-                      );
+                      controller.sendMessage(_messageController.text);
                       _messageController.clear();
                     }
                   },
@@ -85,6 +86,5 @@ class ChatDetailScreen extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

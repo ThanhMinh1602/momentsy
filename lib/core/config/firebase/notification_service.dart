@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+// import 'package:flutter/foundation.dart'
+//     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -15,12 +17,10 @@ class NotificationService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
-  String? _deviceToken;
 
   Future<void> initFirebase() async {
     _requestPermission();
     await _setupLocalNotifications();
-    _getToken();
     _setupForegroundNotifications();
   }
 
@@ -38,13 +38,17 @@ class NotificationService {
   }
 
   /// Lấy Token FCM và gửi lên Server
-  Future<void> _getToken() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      _deviceToken = await _firebaseMessaging.getToken();
+  Future<String?> getDeviceToken() async {
+    try {
+      print('Getting FCM token...');
+      String? _getToken = await FirebaseMessaging.instance.getToken();
+      return _getToken;
+    } catch (e, stackTrace) {
+      print('Error: $e');
+      print('Stack trace: $stackTrace');
+      return null;
     }
   }
-
-  String? getDeviceToken() => _deviceToken;
 
   /// Yêu cầu quyền nhận thông báo
   void _requestPermission() async {

@@ -8,15 +8,25 @@ import 'package:momentsy/core/widgets/card/custom_app_card.dart';
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});
   final notifiController = Get.find<NotificationViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
-      body:
-          notifiController.friendRequests.isEmpty
-              ? Center(child: Text('Không có yêu cầu kết bạn nào'))
-              : Obx(
-                () => ListView.separated(
+      body: Obx(
+        () =>
+            notifiController.friendRequests.isEmpty
+                ? SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(), // Buộc cuộn
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: Text('Không có yêu cầu kết bạn nào'),
+                    ),
+                  ),
+                )
+                : ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(), // Buộc cuộn
                   padding: EdgeInsets.all(
                     space12,
                   ).copyWith(top: MediaQuery.of(context).padding.top + space12),
@@ -66,7 +76,7 @@ class NotificationScreen extends StatelessWidget {
                     );
                   },
                 ),
-              ),
+      ),
     );
   }
 }

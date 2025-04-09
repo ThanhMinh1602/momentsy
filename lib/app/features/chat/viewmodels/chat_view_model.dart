@@ -1,17 +1,22 @@
 import 'package:get/get.dart';
+import 'package:momentsy/app/data/models/message_model.dart';
 import 'package:momentsy/app/data/models/user_model.dart';
 import 'package:momentsy/app/data/services/remote/friend_service.dart';
+import 'package:momentsy/app/data/services/remote/socket_service.dart';
 import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
 class ChatViewModel extends BaseViewModel {
   final FriendService _friendService;
+
   final RxList<UserModel> userModels = <UserModel>[].obs;
 
   ChatViewModel({required FriendService friendService})
     : _friendService = friendService;
+
   @override
   void onInit() {
     super.onInit();
+
     _getFriendList();
   }
 
@@ -32,5 +37,9 @@ class ChatViewModel extends BaseViewModel {
         userModels.assignAll(r.data ?? []);
       },
     );
+  }
+
+  void disconnect() {
+    // socketService.disconnect();
   }
 }

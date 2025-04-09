@@ -6,6 +6,7 @@ import 'package:momentsy/app/data/body/reset_password_body.dart';
 import 'package:momentsy/app/data/body/verify_otp_body.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/auth_service.dart';
+import 'package:momentsy/core/config/firebase/notification_service.dart';
 import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
 class AuthViewModel extends BaseViewModel {
@@ -27,6 +28,8 @@ class AuthViewModel extends BaseViewModel {
 
   Future<void> login(LoginBody loginBody) async {
     setLoading(true);
+    final deviceToken = await NotificationService().getDeviceToken();
+    loginBody.deviceToken = deviceToken;
     final result = await _authService.login(loginBody);
     setLoading(false);
 

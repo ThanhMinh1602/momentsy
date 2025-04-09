@@ -64,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               () => CustomButton(
                 isLoading: authController.isLoading.value,
                 btnText: 'Đăng nhập',
+                isGradient: true,
                 onPressed: login,
               ),
             ),

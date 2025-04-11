@@ -23,9 +23,9 @@ class CustomTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBar(
       padding: padding,
+
       controller: tabController,
       indicatorAnimation: TabIndicatorAnimation.elastic,
-
       indicator: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius32),
         color: AppColor.primary,

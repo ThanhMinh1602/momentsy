@@ -4,6 +4,7 @@
 const double space4 = 4.0;
 const double space6 = 6.0;
 const double space8 = 8.0;
+const double space10 = 10.0;
 const double space12 = 12.0;
 const double space16 = 16.0;
 const double space24 = 24.0;

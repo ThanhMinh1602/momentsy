@@ -15,6 +15,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/appicon.png
   AssetGenImage get appicon => const AssetGenImage('assets/icons/appicon.png');
 
+  /// File path: assets/icons/appicon_svg.svg
+  String get appiconSvg => 'assets/icons/appicon_svg.svg';
+
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
 
@@ -48,6 +51,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     appicon,
+    appiconSvg,
     apple,
     arrowBack,
     facebook,

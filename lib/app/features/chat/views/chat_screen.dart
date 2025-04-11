@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:momentsy/app/features/chat/viewmodels/chat_view_model.dart';
-import 'package:momentsy/app/features/chat/views/widgets/chat_view.dart';
+import 'package:momentsy/app/features/chat/views/widgets/chat_list.dart';
 import 'package:momentsy/app/features/chat/views/widgets/friend_list.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
@@ -30,15 +30,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
+        CustomTabBar(
           padding: EdgeInsets.symmetric(
             horizontal: horizontalPadding,
-            vertical: space12,
-          ).copyWith(top: MediaQuery.of(context).padding.top + space12),
-          child: CustomTabBar(
-            tabController: tabController,
-            tabsTitle: ['Tin nhắn', 'Bạn bè'],
-          ),
+          ).copyWith(top: MediaQuery.of(context).padding.top + verticalPadding),
+          tabController: tabController,
+          tabsTitle: ['Tin nhắn', 'Bạn bè'],
         ),
         Expanded(
           child: TabBarView(

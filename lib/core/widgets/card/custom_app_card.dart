@@ -7,23 +7,21 @@ class CustomAppCard extends StatelessWidget {
     super.key,
     required this.child,
     this.backgroundColor = AppColor.white,
+    this.padding,
+    this.borderRadius,
   });
   final Widget child;
   final Color backgroundColor;
+  final EdgeInsetsGeometry? padding;
+  final double? borderRadius;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.0),
+      padding: padding ?? EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 2,
-            spreadRadius: 1,
-            offset: Offset(1, 1),
-          ),
-        ],
+
         borderRadius: BorderRadius.circular(borderRadius12),
       ),
       child: child,

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:momentsy/app/features/chat/viewmodels/chat_detail_view_model.dart';
+import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/widgets/card/custom_avatar.dart';
 
 class ChatDetailScreen extends StatelessWidget {
   ChatDetailScreen({super.key});
@@ -11,7 +14,7 @@ class ChatDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${controller.userModel.name}')),
+      appBar: ChatAppBar(controller: controller),
       body: Column(
         children: [
           Expanded(
@@ -44,12 +47,16 @@ class ChatDetailScreen extends StatelessWidget {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                         children: [
-                          Text(message.content ?? '--:--'),
+                          Text(
+                            message.content ?? '--:--',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
                           const SizedBox(height: 5),
                           Text(
-                            DateFormat(
-                              'HH:mm',
-                            ).format(message.timestamp ?? DateTime.now()),
+                            _formatTime(message.timestamp ?? DateTime.now()),
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
@@ -63,33 +70,101 @@ class ChatDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Nhập tin nhắn...',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+          _buildInputArea(),
+        ],
+      ),
+    );
+  }
+
+  String _formatTime(DateTime time) {
+    final now = DateTime.now();
+    final isToday =
+        time.day == now.day && time.month == now.month && time.year == now.year;
+    return isToday
+        ? DateFormat('HH:mm').format(time)
+        : DateFormat('dd/MM').format(time);
+  }
+
+  Widget _buildInputArea() {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      color: Colors.grey[100],
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              decoration: InputDecoration(
+                hintText: 'Nhập tin nhắn...',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () {
-                    if (_messageController.text.isNotEmpty) {
-                      controller.sendMessage(_messageController.text);
-                      _messageController.clear();
-                    }
-                  },
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
                 ),
-              ],
+              ),
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.send, color: Colors.blue),
+            onPressed: () {
+              if (_messageController.text.isNotEmpty) {
+                controller.sendMessage(_messageController.text);
+                _messageController.clear();
+              }
+            },
           ),
         ],
       ),
     );
   }
+}
+
+class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
+  ChatAppBar({super.key, required this.controller});
+
+  final ChatDetailViewModel controller;
+  Color foregroundColor = AppColor.white;
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColor.primary,
+      elevation: 1,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back, color: foregroundColor),
+        onPressed: () => Get.back(),
+      ),
+      title: Row(
+        children: [
+          CustomAvatar(
+            imageUrl: controller.userModel.avatar,
+            size: 35,
+            showBorder: false,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            controller.userModel.name ?? 'Không tên',
+            style: AppStyle.bold16.copyWith(color: foregroundColor),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.call, color: foregroundColor),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.videocam, color: foregroundColor),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

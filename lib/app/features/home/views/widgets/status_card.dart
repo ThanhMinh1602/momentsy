@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:momentsy/app/data/models/image_model.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
+import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/widgets/card/custom_avatar.dart';
 import 'package:momentsy/gen/assets.gen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -15,110 +17,135 @@ class StatusCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Stack(
-        children: [_buildImage(), if (!isFocus) _buildImageNotifi()],
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(),
+        child: Stack(children: [_buildImage(), _buildImageNotifi()]),
       ),
     );
   }
 
   Widget _buildImageNotifi() {
     return Positioned(
-      left: space12,
-      right: space12,
       top: space12,
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: AppColor.white,
-            backgroundImage:
-                story?.uploadedBy?.avatar != null
-                    ? NetworkImage(story!.uploadedBy!.avatar!)
-                    : AssetImage(Assets.images.avatarNull.path),
-            radius: 22,
-          ),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                story?.uploadedBy?.name ?? 'Unknown',
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black54,
-                      offset: Offset(1, 1),
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-              ),
-              Text(
-                timeago.format(
-                  story?.uploadedAt ?? DateTime.now(),
-                  locale: "vi",
-                ),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black54,
-                      offset: Offset(1, 1),
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Spacer(),
-          Container(
+      left: 0,
+      right: 0,
+      child: Center(
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 400),
+          scale: isFocus ? 0 : 1.2,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: space6,
+              vertical: space4,
+            ),
             decoration: BoxDecoration(
-              color: Colors.black38,
-              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withOpacity(0.5),
+                  Colors.black.withOpacity(0.3),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: BorderRadius.circular(14),
             ),
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.more_horiz, color: Colors.white),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildAvatar(),
+                const SizedBox(width: 5),
+                _buildUserInfo(),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
+  Widget _buildAvatar() {
+    return CustomAvatar(
+      imageUrl: story?.uploadedBy?.avatar,
+      size: 30,
+      showBorder: true,
+    );
+  }
+
+  Widget _buildUserInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          story?.uploadedBy?.name ?? 'Unknown',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppStyle.bold12.copyWith(color: AppColor.white),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          timeago.format(story?.uploadedAt ?? DateTime.now(), locale: "vi"),
+          style: TextStyle(
+            fontSize: 8,
+            color: AppColor.white.withOpacity(0.6),
+            fontWeight: FontWeight.w400,
+            height: 1.0,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.2),
+                offset: const Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildImage() {
-    return story?.downloadLink == null
-        ? Image.asset(Assets.images.imageNull.path)
-        : CachedNetworkImage(
-          imageUrl: story!.downloadLink!,
-          fit: BoxFit.scaleDown,
-          placeholder:
-              (context, url) => Center(
-                child: CircularProgressIndicator(color: AppColor.primary),
-              ),
-          errorWidget:
-              (context, url, error) => Container(
-                color: AppColor.cardLight,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.error, size: 50, color: AppColor.error),
-                      SizedBox(height: 8),
-                      Text(
-                        'Không thể tải ảnh',
-                        style: TextStyle(color: AppColor.textSecondary),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppColor.cardLight,
+      ),
+      child:
+          story?.downloadLink == null
+              ? Image.asset(Assets.images.imageNull.path, fit: BoxFit.cover)
+              : CachedNetworkImage(
+                imageUrl: story!.downloadLink!,
+                fit: BoxFit.cover,
+                placeholder:
+                    (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary,
+                        strokeWidth: 2,
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                errorWidget:
+                    (context, url, error) => Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 40,
+                            color: AppColor.error,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Không thể tải ảnh',
+                            style: TextStyle(
+                              color: AppColor.textSecondary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
               ),
-        );
+    );
   }
 }

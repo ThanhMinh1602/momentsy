@@ -74,21 +74,25 @@ class AppPages {
     GetPage(
       name: AppRoutes.CHATDETAIL,
       page: () => ChatDetailScreen(),
+      transition: Transition.rightToLeft,
       binding: ChatDetailBinding(),
     ),
     GetPage(
       name: AppRoutes.CAMERA,
       page: () => CameraScreen(),
+      transition: Transition.zoom,
       binding: CameraBinding(),
     ),
     GetPage(
       name: AppRoutes.PROFILE,
+      transition: Transition.rightToLeft,
       page: () => ProfileScreen(),
       binding: SettingBinding(),
     ),
     GetPage(
       name: AppRoutes.SCANQR,
       page: () => QrScanScreen(),
+      transition: Transition.rightToLeft,
       binding: SettingBinding(),
     ),
   ];

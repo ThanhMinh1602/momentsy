@@ -35,16 +35,6 @@ class CustomButton extends StatelessWidget {
                 : null,
         borderRadius: BorderRadius.circular(16.0),
         color: isGradient ? null : AppColor.primary,
-        boxShadow: [
-          BoxShadow(
-            color:
-                isGradient
-                    ? AppColor.primary.withOpacity(0.2)
-                    : AppColor.shadow,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
       ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,

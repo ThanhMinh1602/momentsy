@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/constants/app_style.dart';
 
 class AuthTitle extends StatelessWidget {
   const AuthTitle({super.key, required this.title, required this.subTitle});
@@ -9,20 +10,13 @@ class AuthTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColor.textPrimary,
-          ),
-        ),
+        Text(title, style: AppStyle.bold32),
         SizedBox(height: 12.0),
         Text(
           subTitle,
-          style: TextStyle(fontSize: 14, color: AppColor.textSecondary),
+          style: AppStyle.regular14.copyWith(color: AppColor.grey),
         ),
       ],
     );

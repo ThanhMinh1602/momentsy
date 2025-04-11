@@ -11,15 +11,18 @@ class ChatDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat với ${controller.receiverId}')),
+      appBar: AppBar(title: Text('${controller.userModel.name}')),
       body: Column(
         children: [
           Expanded(
             child: Obx(
               () => ListView.builder(
+                reverse: true,
+                controller: controller.scrollController,
                 itemCount: controller.messages.length,
                 itemBuilder: (context, index) {
-                  final message = controller.messages[index];
+                  final reverseData = controller.messages.reversed.toList();
+                  final message = reverseData[index];
                   final isMe = message.senderId == controller.userId;
 
                   return Align(
@@ -41,10 +44,12 @@ class ChatDetailScreen extends StatelessWidget {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                         children: [
-                          Text(message.content),
+                          Text(message.content ?? '--:--'),
                           const SizedBox(height: 5),
                           Text(
-                            DateFormat('HH:mm').format(message.timestamp),
+                            DateFormat(
+                              'HH:mm',
+                            ).format(message.timestamp ?? DateTime.now()),
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.grey,

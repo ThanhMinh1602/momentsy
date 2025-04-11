@@ -4,6 +4,12 @@ import 'package:momentsy/app/features/chat/viewmodels/chat_view_model.dart';
 class ChatBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(ChatViewModel(friendService: Get.find()));
+    Get.put(
+      ChatViewModel(
+        friendService: Get.find(),
+        chatService: Get.find(),
+        socketService: Get.find(),
+      ),
+    );
   }
 }

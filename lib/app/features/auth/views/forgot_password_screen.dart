@@ -23,14 +23,13 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreenAuthWidget(
+      title: 'Quên mật khẩu',
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: space24,
           children: [
-            AuthTitle(
-                title: 'Quên mật khẩu', subTitle: 'Nhập email để tiếp tục!'),
             CustomTextfiled(
               hintText: 'Email',
               controller: emailController,
@@ -38,11 +37,12 @@ class ForgotPasswordScreen extends StatelessWidget {
             ),
             Obx(
               () => CustomButton(
+                isGradient: true,
                 isLoading: authController.isLoading.value,
                 btnText: 'Gửi',
                 onPressed: sendOtp,
               ),
-            )
+            ),
           ],
         ),
       ),

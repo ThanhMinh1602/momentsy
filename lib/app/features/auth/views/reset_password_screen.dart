@@ -29,17 +29,13 @@ class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreenAuthWidget(
+      title: 'Đặt lại mật khẩu',
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: space24,
           children: [
-            AuthTitle(
-              title: 'Cập nhật lại mật khẩu',
-              subTitle:
-                  'Tạo mật khẩu mới. Đảm bảo mật khẩu này khác với mật khẩu trước đó để bảo mật',
-            ),
             CustomTextfiled(
               hintText: 'Nhập mật khẩu mới',
               controller: _passwordController,
@@ -58,6 +54,7 @@ class ResetPasswordScreen extends StatelessWidget {
             ),
             Obx(
               () => CustomButton(
+                isGradient: true,
                 btnText: 'Xong',
                 isLoading: _authController.isLoading.value,
                 onPressed: resetPassword,

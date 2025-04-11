@@ -20,3 +20,6 @@ const double borderRadius32 = 32.0;
 
 // App Padding
 const double horizontalPadding = 12.0;
+const double verticalPadding = 12.0;
+const double horizontalPaddingAuth = 24.0;
+const double verticalPaddingAuth = 16.0;

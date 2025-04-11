@@ -1,15 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/models/message_model.dart';
+import 'package:momentsy/app/data/models/user_model.dart';
 import 'package:momentsy/app/data/services/remote/chat_service.dart';
 import 'package:momentsy/app/data/services/remote/socket_service.dart';
 import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
 class ChatDetailViewModel extends BaseViewModel {
   final RxList<MessageModel> messages = <MessageModel>[].obs;
+  final ScrollController scrollController = ScrollController();
   final SocketService _socketService;
   final ChatService _chatService;
 
-  late String receiverId;
+  late UserModel userModel;
 
   ChatDetailViewModel({
     required SocketService socketService,
@@ -20,13 +23,28 @@ class ChatDetailViewModel extends BaseViewModel {
   @override
   void onInit() {
     super.onInit();
-    receiverId = Get.arguments;
+    userModel = Get.arguments;
     loadOldMessages();
     initSocket();
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.minScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   void loadOldMessages() async {
-    final result = await _chatService.getConversation(userId, receiverId);
+    final result = await _chatService.getConversation(
+      userId,
+      userModel.id ?? '',
+    );
     result.fold(
       (l) {
         print('Get conversation fail: ${l.message}');
@@ -41,8 +59,9 @@ class ChatDetailViewModel extends BaseViewModel {
   void initSocket() {
     _socketService.on('newMessage', (data) {
       final message = MessageModel.fromJson(data);
-      if (message.senderId == receiverId || message.receiverId == receiverId) {
+      if (message.senderId == userModel.id) {
         messages.add(message);
+        _scrollToBottom();
       }
     });
   }
@@ -50,13 +69,12 @@ class ChatDetailViewModel extends BaseViewModel {
   void sendMessage(String content) {
     final message = MessageModel(
       senderId: userId,
-      receiverId: receiverId,
+      receiverId: userModel.id,
       content: content,
       timestamp: DateTime.now(),
     );
-
     messages.add(message);
-
+    _scrollToBottom();
     _socketService.emit('sendMessage', message.toJson());
   }
 }

@@ -41,18 +41,7 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.pages,
       initialBinding: AppBinding(),
       theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme(
-          TextTheme(
-            bodyLarge: TextStyle(color: AppColor.textPrimary),
-            bodyMedium: TextStyle(color: AppColor.textPrimary),
-            titleLarge: TextStyle(
-              color: AppColor.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-            titleMedium: TextStyle(color: AppColor.textPrimary),
-            labelLarge: TextStyle(color: AppColor.textPrimary),
-          ),
-        ),
+        textTheme: GoogleFonts.interTextTheme(),
         primaryColor: AppColor.primary,
         scaffoldBackgroundColor: AppColor.background,
         cardColor: AppColor.cardLight,

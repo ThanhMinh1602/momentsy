@@ -19,110 +19,120 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final homeController = Get.find<HomeViewModel>();
-  late PreloadPageController _pageController;
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
+  final FocusNode _focusNode = FocusNode();
 
+  final homeController = Get.find<HomeViewModel>();
+
+  bool isFocused = false;
+  @override
+  bool get wantKeepAlive => true; // 👈 GIỮ TRẠNG THÁI
   @override
   void initState() {
-    _pageController = PreloadPageController(initialPage: 0);
     super.initState();
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        setState(() {
+          isFocused = true;
+        });
+      } else {
+        setState(() {
+          isFocused = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        body: Container(
-          color: AppColor.background,
-          child: Obx(
-            () =>
-                homeController.isLoading.value
-                    ? Center(
-                      child: CircularProgressIndicator(color: AppColor.primary),
-                    )
-                    : Padding(
-                      padding: EdgeInsets.only(
-                        bottom: space12,
-                        top: MediaQuery.of(context).padding.top + space12,
-                        left: space12,
-                        right: space12,
-                      ),
-                      child: GestureDetector(
-                        onHorizontalDragEnd: (details) {
-                          if (details.primaryVelocity! > -1000) {
-                            Get.toNamed(AppRoutes.CAMERA);
-                          }
-                        },
-                        child:
-                            homeController.images.isEmpty
-                                ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Lottie.asset(
-                                        Assets.lotties.addFirstImage,
-                                        width: context.getWidth / 2.5,
-                                      ),
-                                      Text(
-                                        'Vuốt sang phải để thêm hình',
-                                        style: AppStyle.bold12,
-                                      ),
-                                    ],
+      child: Obx(
+        () =>
+            homeController.isLoading.value
+                ? Center(
+                  child: CircularProgressIndicator(color: AppColor.primary),
+                )
+                : Padding(
+                  padding: EdgeInsets.only(
+                    bottom: space12,
+                    top: MediaQuery.of(context).padding.top + space12,
+                    left: space12,
+                    right: space12,
+                  ),
+                  child: GestureDetector(
+                    onHorizontalDragEnd: (details) {
+                      if (details.primaryVelocity! > -1000) {
+                        Get.toNamed(AppRoutes.CAMERA);
+                      }
+                    },
+                    child:
+                        homeController.images.isEmpty
+                            ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    Assets.lotties.addFirstImage,
+                                    width: context.getWidth / 2.5,
                                   ),
-                                )
-                                : Column(
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(16),
-                                        child: PreloadPageView.builder(
-                                          key: PageStorageKey("pageView"),
-                                          controller: _pageController,
-                                          scrollDirection: Axis.vertical,
-                                          itemCount:
-                                              homeController.images.length,
-                                          preloadPagesCount: 10,
-                                          physics: BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            final story =
-                                                homeController.images[index];
-                                            return AnimatedContainer(
-                                              duration: Duration(
-                                                milliseconds: 300,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: AppColor.shadow,
-                                                    blurRadius: 10,
-                                                    spreadRadius: 2,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Center(
-                                                child: StatusCardWidget(
-                                                  story: story,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                  Text(
+                                    'Vuốt sang phải để thêm hình',
+                                    style: AppStyle.bold12,
+                                  ),
+                                ],
+                              ),
+                            )
+                            : Column(
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: PreloadPageView.builder(
+                                      key: PageStorageKey("pageView"),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: homeController.images.length,
+                                      preloadPagesCount: 10,
+                                      physics: BouncingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        final story =
+                                            homeController.images[index];
+                                        return AnimatedContainer(
+                                          duration: Duration(milliseconds: 300),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: StatusCardWidget(
+                                              isFocus: isFocused,
+                                              story: story,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    SizedBox(height: 12),
-                                    CustomSendMessageField(),
-                                  ],
+                                  ),
                                 ),
-                      ),
-                    ),
-          ),
-        ),
+                                SizedBox(height: 12),
+                                CustomSendMessageField(
+                                  focusNode: _focusNode,
+                                  hintText: 'Trả lời tin',
+                                ),
+                              ],
+                            ),
+                  ),
+                ),
       ),
     );
   }

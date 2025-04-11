@@ -28,33 +28,28 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.background,
-      appBar: AppBar(
-        title: Text('Chats'),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: horizontalPadding,
-              vertical: 12.0,
-            ),
-            child: CustomTabBar(
-              tabController: tabController,
-              tabsTitle: ['Tin nhắn', 'Bạn bè'],
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: space12,
+          ).copyWith(top: MediaQuery.of(context).padding.top + space12),
+          child: CustomTabBar(
+            tabController: tabController,
+            tabsTitle: ['Tin nhắn', 'Bạn bè'],
           ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [ChatList(), FriendList(chatViewModel: _controller)],
-            ),
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: tabController,
+            children: [
+              ChatList(chatViewModel: _controller),
+              FriendList(chatViewModel: _controller),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

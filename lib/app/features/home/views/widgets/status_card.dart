@@ -3,26 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:momentsy/app/data/models/image_model.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
-import 'package:momentsy/core/constants/app_style.dart';
 import 'package:momentsy/gen/assets.gen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class StatusCardWidget extends StatelessWidget {
-  const StatusCardWidget({super.key, this.story});
+  const StatusCardWidget({super.key, this.story, required this.isFocus});
 
   final ImageModel? story;
+  final bool isFocus;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: AppColor.shadow, blurRadius: 8, spreadRadius: 2),
-          ],
-        ),
-        child: Stack(children: [_buildImage(), _buildImageNotifi()]),
+      child: Stack(
+        children: [_buildImage(), if (!isFocus) _buildImageNotifi()],
       ),
     );
   }

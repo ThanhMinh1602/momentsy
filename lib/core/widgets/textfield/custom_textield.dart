@@ -11,6 +11,7 @@ class CustomTextfiled extends StatefulWidget {
     this.controller,
     this.validator,
     this.suffixIcon,
+    this.focusNode,
   });
 
   final bool isPassword;
@@ -18,6 +19,7 @@ class CustomTextfiled extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
+  final FocusNode? focusNode;
 
   @override
   State<CustomTextfiled> createState() => _CustomTextfiledState();
@@ -29,19 +31,10 @@ class _CustomTextfiledState extends State<CustomTextfiled> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, 2),
-            spreadRadius: 0,
-            blurRadius: 4.0,
-            color: AppColor.shadow,
-          ),
-        ],
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0)),
       child: TextFormField(
         controller: widget.controller,
+        focusNode: widget.focusNode,
         obscureText: widget.isPassword ? isHidden : false,
         style: AppStyle.medium14.copyWith(color: AppColor.textPrimary),
         validator: widget.validator ?? ValidatorUtils.isEmpty,
@@ -68,7 +61,7 @@ class _CustomTextfiledState extends State<CustomTextfiled> {
           fillColor: AppColor.surface,
           contentPadding: EdgeInsets.symmetric(
             horizontal: 16.0,
-            vertical: 14.0,
+            vertical: 16.0,
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16.0),

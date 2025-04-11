@@ -1,11 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:momentsy/app/features/chat/viewmodels/chat_view_model.dart';
+import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/gen/assets.gen.dart';
 
 class ChatList extends StatelessWidget {
-  const ChatList({super.key});
+  const ChatList({super.key, required this.chatViewModel});
+  final ChatViewModel chatViewModel;
 
   @override
   Widget build(BuildContext context) {
+    return chatViewModel.conversationModels.isEmpty
+        ? _chatNotFound()
+        : Obx(
+          () => ListView.builder(
+            itemCount: chatViewModel.conversationModels.length,
+            itemBuilder: (context, index) {
+              final conversation = chatViewModel.conversationModels[index];
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      conversation.friend?.avatar != null
+                          ? NetworkImage(conversation.friend!.avatar!)
+                          : AssetImage(Assets.images.avatarNull.path)
+                              as ImageProvider,
+                ),
+                title: Text(conversation.friend?.name ?? ''),
+                subtitle: Text(conversation.lastMessage!.content ?? ''),
+                onTap:
+                    () => Get.toNamed(
+                      AppRoutes.CHATDETAIL,
+                      arguments: conversation.friend,
+                    ),
+              );
+            },
+          ),
+        );
+  }
+
+  Widget _chatNotFound() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,14 +71,6 @@ class ChatList extends StatelessWidget {
             style: TextStyle(color: AppColor.textSecondary, fontSize: 16),
           ),
           SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.add),
-            label: Text('New message'),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-          ),
         ],
       ),
     );

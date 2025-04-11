@@ -1,77 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:momentsy/app/features/home/views/home_screen.dart';
 import 'package:momentsy/app/features/notification/views/notification_screen.dart';
 import 'package:momentsy/app/features/setting/views/setting_screen.dart';
 import 'package:momentsy/app/features/chat/views/chat_screen.dart';
 import 'package:momentsy/core/constants/app_color.dart';
+import 'package:momentsy/core/constants/app_dimensions.dart';
+import 'package:momentsy/core/widgets/tabbar/custom_tab_bar.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  int index = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class MainScreen extends StatelessWidget {
+  MainScreen({super.key});
+  final List<Widget> _bottomNav = [
+    FaIcon(Icons.star_rounded),
+    FaIcon(Icons.chat),
+    FaIcon(Icons.notifications),
+    FaIcon(Icons.settings),
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.background,
-      body: IndexedStack(
-        index: index,
-        children: [
-          HomeScreen(),
-          ChatScreen(),
-          NotificationScreen(),
-          SettingScreen(),
-        ],
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: AppColor.primaryLight.withOpacity(0.1),
-          highlightColor: AppColor.primaryLight.withOpacity(0.1),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: index,
-          onTap: (int i) {
-            setState(() {
-              index = i;
-            });
-          },
-          backgroundColor: AppColor.surface,
-          selectedItemColor: AppColor.primary,
-          unselectedItemColor: AppColor.grey,
-          elevation: 8,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline),
-              activeIcon: Icon(Icons.chat_bubble),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_none_outlined),
-              activeIcon: Icon(Icons.notifications),
-              label: 'Notification',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Setting',
-            ),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: AppColor.background,
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            HomeScreen(),
+            ChatScreen(),
+            NotificationScreen(),
+            SettingScreen(),
           ],
+        ),
+        bottomNavigationBar: CustomTabBar(
+          tabsIcon: _bottomNav,
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         ),
       ),
     );

@@ -1,5 +1,3 @@
-import 'package:momentsy/core/config/firebase/notification_service.dart';
-
 class LoginBody {
   final String email;
   final String password;

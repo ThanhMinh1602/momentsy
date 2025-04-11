@@ -4,11 +4,16 @@ import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
 class MainViewModel extends BaseViewModel {
   final socketService = Get.find<SocketService>();
+  RxInt currentIndex = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
     socketService.initSocket(userId);
+  }
+
+  void changeIndex(int index) {
+    currentIndex.value = index;
   }
 
   @override

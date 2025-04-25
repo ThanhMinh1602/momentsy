@@ -57,7 +57,8 @@ class ChatDetailViewModel extends BaseViewModel {
   }
 
   void initSocket() {
-    _socketService.on('newMessage', (data) {
+  _socketService.onMessageReceived().listen((data) {
+     print('onMessageReceived: $data');
       final message = MessageModel.fromJson(data);
       if (message.senderId == userModel.id) {
         messages.add(message);
@@ -75,6 +76,6 @@ class ChatDetailViewModel extends BaseViewModel {
     );
     messages.add(message);
     _scrollToBottom();
-    _socketService.emit('sendMessage', message.toJson());
+    _socketService.sendMessage( message.toJson());
   }
 }

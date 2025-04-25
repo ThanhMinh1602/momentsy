@@ -42,7 +42,7 @@ class SettingScreen extends StatelessWidget {
         child: Row(
           children: [
             CustomAvatar(
-              imageUrl: _settingViewModel.user.value.avatar,
+              image: _settingViewModel.user.value.avatar,
               size: 60,
               showBorder: true,
             ),

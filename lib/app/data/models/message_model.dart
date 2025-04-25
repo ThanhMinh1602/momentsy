@@ -4,6 +4,7 @@ class MessageModel {
   final String? receiverId;
   final String? content;
   final DateTime? timestamp;
+  final String?  status;
 
   MessageModel({
     this.id,
@@ -11,6 +12,7 @@ class MessageModel {
     this.receiverId,
     this.content,
     this.timestamp,
+    this.status
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class MessageModel {
           json['timestamp'] != null
               ? DateTime.tryParse(json['timestamp'])
               : null,
+      status  : json['status']
     );
   }
 

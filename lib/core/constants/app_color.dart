@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  // Màu chính - Xanh lá matcha trend với Gen Z
   static const primary = Color(0xFF2DD4BF); // Xanh lá ngọc - Teal
   static const primaryLight = Color(0xFF5EEAD4); // Xanh lá ngọc nhạt
   static const primaryDark = Color(0xFF0F766E); // Xanh lá ngọc đậm
 
-  // Màu phụ - Phong cách Gen Z
+
   static const secondary = Color(0xFFFF6B6B); // Hồng đào trendy
   static const secondaryLight = Color(0xFFFF9F9F); // Hồng đào nhạt
   static const accent = Color(0xFFFCD34D); // Vàng nghệ (curcuma)
 
-  // Màu nền - Có chút ombre theo Gen Z style
+
   static const background = Color(
     0xFFF9FAFB,
-  ); // Gần như trắng nhưng có chút xám
+  ); 
   static const surface = Color(0xFFFFFFFF); // Trắng tinh
   static const cardLight = Color(0xFFF1F5F9); // Xanh rất nhạt cho card
 
@@ -23,7 +22,7 @@ class AppColor {
   static const textSecondary = Color(0xFF64748B); // Xám xanh - Văn bản phụ
   static const textHint = Color(0xFF94A3B8); // Xám nhạt - Gợi ý
 
-  // Màu tương tác phong cách Gen Z
+
   static const success = Color(0xFF4ADE80); // Xanh lá neo-mint
   static const error = Color(0xFFF43F5E); // Đỏ hồng
   static const warning = Color(0xFFFBBF24); // Vàng rực

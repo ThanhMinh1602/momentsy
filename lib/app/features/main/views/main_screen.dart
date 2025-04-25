@@ -13,9 +13,7 @@ import 'package:momentsy/gen/assets.gen.dart';
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
   final List<Widget> _bottomNav = [
-    SvgPicture.asset(
-      Assets.icons.appiconSvg,
-    ),
+   FaIcon(FontAwesomeIcons.smile),
     FaIcon(Icons.chat),
     FaIcon(Icons.notifications),
     FaIcon(Icons.settings),
@@ -36,7 +34,12 @@ class MainScreen extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: CustomTabBar(
-          tabsIcon: _bottomNav,
+          tabsIcon: [
+   FaIcon(FontAwesomeIcons.smile),
+    FaIcon(FontAwesomeIcons.comment),
+    FaIcon(FontAwesomeIcons.bell),
+    FaIcon(Icons.settings_outlined),
+  ],
           padding: EdgeInsets.symmetric(
             horizontal: horizontalPadding,
             vertical: verticalPadding,

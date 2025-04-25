@@ -5,16 +5,17 @@ import 'package:momentsy/app/data/services/remote/file_service.dart';
 import 'package:momentsy/app/data/services/remote/friend_service.dart';
 import 'package:momentsy/app/data/services/remote/socket_service.dart';
 import 'package:momentsy/app/data/services/remote/user_service.dart';
+import 'package:momentsy/core/config/socket/socket_config.dart';
 
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    // Register all services
     Get.put(AuthService());
     Get.put(FileService());
     Get.put(FriendService());
     Get.put(UserService());
-    Get.put(SocketService());
+    Get.put(SocketConfig());
     Get.put(ChatService());
+    Get.put(SocketService(Get.find()));
   }
 }

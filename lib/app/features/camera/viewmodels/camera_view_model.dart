@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 import 'package:momentsy/app/data/services/remote/file_service.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:image/image.dart' as img;
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class CameraViewModel extends GetxController {
+class CameraViewModel extends BaseViewModel {
   CameraViewModel({required FileService fileService})
     : _fileService = fileService;
 
@@ -24,7 +25,6 @@ class CameraViewModel extends GetxController {
   Rx<double> minZoom = 1.0.obs;
   Rx<double> maxZoom = 1.0.obs;
   RxString imagePath = ''.obs;
-  Rx<bool> isLoading = false.obs;
 
   @override
   void onInit() {
@@ -94,6 +94,7 @@ class CameraViewModel extends GetxController {
     if (cameraController.value == null) return;
 
     try {
+      setLoading(true);
       final XFile image = await cameraController.value!.takePicture();
 
       if (isFrontCamera.value) {
@@ -120,7 +121,7 @@ class CameraViewModel extends GetxController {
           await File(image.path).writeAsBytes(jpgBytes);
         }
       }
-
+      setLoading(false);
       imagePath.value = image.path;
     } catch (e) {
       print("Error capturing image: $e");
@@ -131,9 +132,9 @@ class CameraViewModel extends GetxController {
   Future<void> sendFile() async {
     if (imagePath.value.isEmpty) return;
 
-    isLoading.value = true;
+    setLoading(true);
     final result = await _fileService.fileUpload(File(imagePath.value));
-    isLoading.value = false;
+    setLoading(false);
 
     result.fold((l) => Get.snackbar('Error', l.message), (r) {
       imagePath.value = '';

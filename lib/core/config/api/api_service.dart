@@ -73,12 +73,13 @@ abstract class ApiService with DioExceptionMixin {
   }
 
   // Thêm phương thức upload file
-  Future<Response> uploadFile(String endpoint, File file, String userId) async {
+  Future<Response> uploadFile(String endpoint, File file, String userId, {String? fileType}) async {
     try {
       String fileName = file.path.split('/').last;
       FormData formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path, filename: fileName),
         "userId": userId,
+        "fileType": fileType ?? 'story',
       });
 
       return await _dio.post(

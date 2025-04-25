@@ -1,29 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/gen/assets.gen.dart';
 
 class CustomAvatar extends StatelessWidget {
-  final String? imageUrl;
+  final dynamic image;
   final double size;
   final bool showBorder;
-  final bool isAsset;
 
   const CustomAvatar({
     super.key,
-    this.imageUrl,
+    this.image,
     this.size = 60,
     this.showBorder = true,
-    this.isAsset = false,
   });
+  ImageProvider<Object> getImageProvider() {
+    if (image != null) {
+      if (image is String && image.isNotEmpty) {
+        return NetworkImage(image);
+      } else if (image is File) {
+        return FileImage(image);
+      } else if (image is AssetImage) {
+        return image;
+      }
+    }
+    return AssetImage(Assets.images.avatarNull.path);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ImageProvider<Object> avatarImage =
-        imageUrl != null && imageUrl!.isNotEmpty
-            ? isAsset
-                ? AssetImage(imageUrl!)
-                : NetworkImage(imageUrl!)
-            : AssetImage(Assets.images.avatarNull.path);
     return Container(
       width: size,
       height: size,
@@ -43,7 +49,7 @@ class CustomAvatar extends StatelessWidget {
         child: Container(
           color: AppColor.background,
           child: Image(
-            image: avatarImage,
+            image: getImageProvider(),
             width: size,
             height: size,
             fit: BoxFit.cover,

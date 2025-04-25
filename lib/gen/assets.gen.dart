@@ -15,8 +15,8 @@ class $AssetsIconsGen {
   /// File path: assets/icons/appicon.png
   AssetGenImage get appicon => const AssetGenImage('assets/icons/appicon.png');
 
-  /// File path: assets/icons/appicon_svg.svg
-  String get appiconSvg => 'assets/icons/appicon_svg.svg';
+  /// File path: assets/icons/appiconsvg.svg
+  String get appiconsvg => 'assets/icons/appiconsvg.svg';
 
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
@@ -51,7 +51,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     appicon,
-    appiconSvg,
+    appiconsvg,
     apple,
     arrowBack,
     facebook,
@@ -86,11 +86,14 @@ class $AssetsLottiesGen {
   /// File path: assets/lotties/add_first_image.json
   String get addFirstImage => 'assets/lotties/add_first_image.json';
 
+  /// File path: assets/lotties/loading.json
+  String get loading => 'assets/lotties/loading.json';
+
   /// File path: assets/lotties/swipe_right.json
   String get swipeRight => 'assets/lotties/swipe_right.json';
 
   /// List of all assets
-  List<String> get values => [addFirstImage, swipeRight];
+  List<String> get values => [addFirstImage, loading, swipeRight];
 }
 
 class Assets {

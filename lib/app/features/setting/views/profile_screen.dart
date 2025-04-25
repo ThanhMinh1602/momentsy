@@ -1,22 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/features/setting/viewmodels/setting_view_model.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/extension/build_context_extension.dart';
-import 'package:momentsy/gen/assets.gen.dart';
+import 'package:momentsy/core/widgets/card/custom_avatar.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
-  final _settingViewModel = Get.find<SettingViewModel>();
-  final _userId = SharedPreferencesService.getUserId();
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final TextEditingController _nameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final SettingViewModel _settingViewModel = Get.find<SettingViewModel>();
+  initState() {
+    super.initState();
+    _nameController.text = _settingViewModel.user.value.name ?? '';
+    _emailController.text = _settingViewModel.user.value.email ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
     final qrImageView = QrImageView(
-      data: _userId ?? '',
+      data: _settingViewModel.userId,
       size: context.getWidth * 0.45,
       eyeStyle: const QrEyeStyle(
         eyeShape: QrEyeShape.circle,
@@ -60,47 +73,42 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Avatar
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColor.primary, width: 2),
-                  ),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        _settingViewModel.user.value.avatar != null
-                            ? NetworkImage(_settingViewModel.user.value.avatar!)
-                            : AssetImage(Assets.images.avatarNull.path)
-                                as ImageProvider,
+                GestureDetector(
+                  onTap: () async {
+                    await _settingViewModel.avaterPicker();
+                  },
+                  child: CustomAvatar(
+                    image:
+                        _settingViewModel.avatarFile.value != null
+                            ? _settingViewModel.avatarFile.value
+                            : _settingViewModel.user.value.avatar,
+                    size: context.getWidth * 0.25,
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Tên và email
-                Text(
-                  _settingViewModel.user.value.name ?? 'Unknown',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.textPrimary,
-                    letterSpacing: -0.5,
+                TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: "Tên",
+                    labelStyle: TextStyle(color: AppColor.textPrimary),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: AppColor.surface,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  _settingViewModel.user.value.email ?? 'Unknown',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColor.textSecondary,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _userId ?? 'No ID',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                    labelStyle: TextStyle(color: AppColor.textPrimary),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: AppColor.surface,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -132,6 +140,29 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
+                ),
+                const SizedBox(height: 24),
+                // Nút lưu thông tin sau khi chỉnh sửa
+                ElevatedButton(
+                  onPressed: () {
+                    _settingViewModel.updateUserProfile(
+                      _nameController.text,
+                      _emailController.text,
+                      null,
+                    );
+
+                    Get.snackbar('Thông báo', 'Cập nhật hồ sơ thành công');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text("Lưu thay đổi"),
                 ),
               ],
             ),

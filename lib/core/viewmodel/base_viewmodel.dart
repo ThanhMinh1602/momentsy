@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
-import 'package:momentsy/app/data/services/remote/socket_service.dart';
 
 abstract class BaseViewModel extends GetxController {
-  final socketHelper = Get.find<SocketService>();
   var isLoading = false.obs;
   final String? _userId = SharedPreferencesService.getUserId();
 

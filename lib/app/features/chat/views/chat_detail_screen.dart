@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:momentsy/app/features/chat/viewmodels/chat_detail_view_model.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/extension/build_context_extension.dart';
 import 'package:momentsy/core/widgets/card/custom_avatar.dart';
 
 class ChatDetailScreen extends StatelessWidget {
@@ -32,6 +33,7 @@ class ChatDetailScreen extends StatelessWidget {
                     alignment:
                         isMe ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
+                      width: context.getWidth * 0.8,
                       margin: const EdgeInsets.symmetric(
                         vertical: 5,
                         horizontal: 10,
@@ -124,6 +126,7 @@ class ChatDetailScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   ChatAppBar({super.key, required this.controller});
 
@@ -138,19 +141,21 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         icon: Icon(Icons.arrow_back, color: foregroundColor),
         onPressed: () => Get.back(),
       ),
-      title: Row(
-        children: [
-          CustomAvatar(
-            imageUrl: controller.userModel.avatar,
-            size: 35,
-            showBorder: false,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            controller.userModel.name ?? 'Không tên',
-            style: AppStyle.bold16.copyWith(color: foregroundColor),
-          ),
-        ],
+      title: FittedBox(
+        child: Row(
+          children: [
+            CustomAvatar(
+              image: controller.userModel.avatar,
+              size: 35,
+              showBorder: false,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              controller.userModel.name ?? 'Không tên',
+              style: AppStyle.bold16.copyWith(color: foregroundColor),
+            ),
+          ],
+        ),
       ),
       actions: [
         IconButton(

@@ -25,7 +25,6 @@ class FileService extends ApiService implements IFileService {
         SharedPreferencesService.getUserId() ?? '',
       );
       print('File uploaded: $response');
-
       return Right(BaseModel.fromJson(response.data));
     } on DioException catch (e) {
       return Left(handleDioException(e));

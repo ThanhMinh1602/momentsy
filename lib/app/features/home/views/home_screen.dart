@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
+import 'package:momentsy/core/widgets/progess/custom_circular_progress.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 import 'package:momentsy/app/features/home/viewmodels/home_view_model.dart';
 import 'package:momentsy/app/features/home/views/widgets/status_card.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
-import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/constants/app_style.dart';
 import 'package:momentsy/core/extension/build_context_extension.dart';
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
       child: Obx(() {
         if (homeController.isLoading.value) {
           return const Center(
-            child: CircularProgressIndicator(color: AppColor.primary),
+            child: CustomCircularProgress(),
           );
         }
 
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen>
               scrollDirection: Axis.vertical,
               itemCount: images.length,
               preloadPagesCount: 10,
-              physics: const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 final story = images[index];
                 return Center(

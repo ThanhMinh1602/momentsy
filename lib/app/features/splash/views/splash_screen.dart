@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Center(
         child: SvgPicture.asset(
-          Assets.icons.appiconSvg,
+          Assets.icons.appiconsvg,
           width: context.getWidth * 0.2,
         ),
       ),

@@ -112,33 +112,6 @@ class CameraViewWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              // // Zoom slider
-              // Positioned(
-              //   bottom: 100,
-              //   left: 20,
-              //   right: 20,
-              //   child: Container(
-              //     height: 40,
-              //     decoration: BoxDecoration(
-              //       color: Colors.black.withOpacity(0.5),
-              //       borderRadius: BorderRadius.circular(20),
-              //     ),
-              //     child: SliderTheme(
-              //       data: SliderThemeData(
-              //         activeTrackColor: AppColor.white,
-              //         inactiveTrackColor: Colors.white.withOpacity(0.3),
-              //         thumbColor: AppColor.white,
-              //         overlayColor: Colors.white.withOpacity(0.2),
-              //       ),
-              //       child: Slider(
-              //         value: appCameraController.zoomLevel.value,
-              //         min: appCameraController.minZoom.value,
-              //         max: appCameraController.maxZoom.value,
-              //         onChanged: appCameraController.updateZoom,
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

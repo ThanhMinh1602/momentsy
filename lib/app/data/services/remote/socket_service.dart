@@ -1,31 +1,46 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'dart:async';
+
+import 'package:momentsy/core/config/socket/socket_config.dart';
 
 class SocketService {
-  late IO.Socket socket;
+  final SocketConfig _socket ;
 
-  void initSocket(String userId) {
-    socket = IO.io(dotenv.env['SOCKET_URL'], <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': false,
-      'query': {'userId': userId},
-    });
+  SocketService(this._socket);
 
-    socket.connect();
-    socket.onConnect((_) => print('✅ Socket connected'));
-    socket.onDisconnect((_) => print('❌ Socket disconnected'));
-    socket.onError((data) => print('🚨 Socket error: $data'));
-  }
-
-  void on(String eventName, Function(dynamic data) handler) {
-    socket.on(eventName, handler);
-  }
-
-  void emit(String eventName, dynamic data) {
-    socket.emit(eventName, data);
+  void init(String userId) {
+    _socket.initSocket(userId);
   }
 
   void dispose() {
-    socket.disconnect();
+    _socket.dispose();
+  }
+}
+
+
+extension EmitEvent on SocketService{
+
+  /// Gửi tin nhắn
+  void sendMessage(Map<String, dynamic> messageData) {
+    print('sendMessage on socket: $messageData');
+    _socket.emit('send_message', messageData);
+  }
+
+  /// Gửi yêu cầu thông báo (ví dụ admin push noti)
+  void sendNotificationRequest(Map<String, dynamic> data) {
+    _socket.emit('send_notification', data);
+  }
+
+}
+
+extension ListenEvent on SocketService{
+
+  /// Lắng nghe tin nhắn đến
+  Stream<dynamic> onMessageReceived() {
+    return _socket.listenStream('new_message');
+  }
+
+  /// Lắng nghe khi có thông báo
+  Stream<dynamic> onFriendRequestNotification() {
+    return _socket.listenStream('friend_request');
   }
 }

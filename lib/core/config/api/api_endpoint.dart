@@ -8,6 +8,7 @@ class ApiEndpoint {
   static String fileUpload = "/file/file-upload";
   static String allImage = "/file/list-images";
   static String getUserById = "/user";
+  static String updateUserProfile = "/user/update-user-profile";
   //Chat
   static String getConversation = "/chat";
 

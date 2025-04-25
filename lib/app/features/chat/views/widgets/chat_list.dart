@@ -93,7 +93,7 @@ class ChatList extends StatelessWidget {
   }
 
   Widget _buildAvatar(friend) {
-    return CustomAvatar(imageUrl: friend?.avatar, size: 56, showBorder: false);
+    return CustomAvatar(image: friend?.avatar, size: 56, showBorder: false);
   }
 
   Widget _chatNotFound() {

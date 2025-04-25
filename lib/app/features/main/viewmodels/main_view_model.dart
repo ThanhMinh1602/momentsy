@@ -9,7 +9,7 @@ class MainViewModel extends BaseViewModel {
   @override
   void onInit() {
     super.onInit();
-    socketService.initSocket(userId);
+    socketService.init(userId);
   }
 
   void changeIndex(int index) {

@@ -88,7 +88,7 @@ class FriendList extends StatelessWidget {
   }
 
   Widget _buildAvatar(dynamic friend) {
-    return CustomAvatar(imageUrl: friend.avatar, size: 48, showBorder: false);
+    return CustomAvatar(image: friend.avatar, size: 48, showBorder: false);
   }
 
   Widget _noFriendsWidget() {

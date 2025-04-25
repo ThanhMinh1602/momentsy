@@ -5,9 +5,9 @@ import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/constants/app_style.dart';
 import 'package:momentsy/core/widgets/card/custom_avatar.dart';
+import 'package:momentsy/core/widgets/progess/custom_circular_progress.dart';
 import 'package:momentsy/gen/assets.gen.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
 class StatusCardWidget extends StatelessWidget {
   const StatusCardWidget({super.key, this.story, required this.isFocus});
 
@@ -20,7 +20,12 @@ class StatusCardWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         decoration: BoxDecoration(),
-        child: Stack(children: [_buildImage(), _buildImageNotifi()]),
+        child: Stack(
+          children: [
+            _buildImage(),
+            _buildImageNotifi(),
+          ],
+        ),
       ),
     );
   }
@@ -66,7 +71,7 @@ class StatusCardWidget extends StatelessWidget {
 
   Widget _buildAvatar() {
     return CustomAvatar(
-      imageUrl: story?.uploadedBy?.avatar,
+      image: story?.uploadedBy?.avatar,
       size: 30,
       showBorder: true,
     );
@@ -110,42 +115,36 @@ class StatusCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: AppColor.cardLight,
       ),
-      child:
-          story?.downloadLink == null
-              ? Image.asset(Assets.images.imageNull.path, fit: BoxFit.cover)
-              : CachedNetworkImage(
-                imageUrl: story!.downloadLink!,
-                fit: BoxFit.cover,
-                placeholder:
-                    (context, url) => Center(
-                      child: CircularProgressIndicator(
-                        color: AppColor.primary,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                errorWidget:
-                    (context, url, error) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            size: 40,
-                            color: AppColor.error,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Không thể tải ảnh',
-                            style: TextStyle(
-                              color: AppColor.textSecondary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+      child: story?.downloadLink == null
+          ? Image.asset(Assets.images.imageNull.path, fit: BoxFit.cover)
+          : CachedNetworkImage(
+              imageUrl: story!.downloadLink!,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Center(
+                child: CustomCircularProgress()
               ),
+              errorWidget: (context, url, error) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 40,
+                      color: AppColor.error,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Không thể tải ảnh',
+                      style: TextStyle(
+                        color: AppColor.textSecondary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }

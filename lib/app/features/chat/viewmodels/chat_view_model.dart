@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/models/conversation_model.dart';
 import 'package:momentsy/app/data/models/message_model.dart';
@@ -16,6 +18,7 @@ class ChatViewModel extends BaseViewModel {
   final RxList<ConversationModel> conversationModels =
       <ConversationModel>[].obs;
 
+  
   ChatViewModel({
     required FriendService friendService,
     required ChatService chatService,
@@ -29,8 +32,7 @@ class ChatViewModel extends BaseViewModel {
     super.onInit();
     _getFriendList();
     _getConversationList();
-
-    _socketService.on('newMessage', (data) {
+    _socketService.onMessageReceived().listen( (data) {
       final newMessage = MessageModel.fromJson(data);
       print('New message: ${newMessage.content}');
 

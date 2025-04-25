@@ -20,7 +20,7 @@ class NotificationViewModel extends BaseViewModel {
   void onInit() {
     super.onInit();
     getFriendRequests();
-    _socketService.on('friendRequest', (data) {
+   _socketService.onFriendRequestNotification().listen( (data) {
       final friendRequest = FriendRequestModel.fromJson(data);
       print('friendRequest: $friendRequest');
       friendRequests.add(friendRequest);

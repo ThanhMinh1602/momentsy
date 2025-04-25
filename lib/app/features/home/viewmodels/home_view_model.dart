@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/models/image_model.dart';
 import 'package:momentsy/app/data/services/local/shared_preferences_service.dart';
 import 'package:momentsy/app/data/services/remote/file_service.dart';
 import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
-import 'package:momentsy/gen/assets.gen.dart';
 
 class HomeViewModel extends BaseViewModel {
   final FileService _fileService;
@@ -18,24 +16,24 @@ class HomeViewModel extends BaseViewModel {
     super.onInit();
     initData();
   }
+Future<void> initData() async {
+  setLoading(true);
+  final result = await _fileService.getAllFile(
+    SharedPreferencesService.getUserId() ?? '',
+  );
+  setLoading(false);
 
-  Future<void> initData() async {
-    setLoading(true);
-    final result = await _fileService.getAllFile(
-      SharedPreferencesService.getUserId() ?? '',
-    );
-    setLoading(false);
+  result.fold((l) => showError(l.message), (r) async {
+    images.value = r.data ?? [];
+    // await Future.wait((r.data ?? []).map((img) async {
+    //   await precacheImage(
+    //     img.viewLink == null
+    //         ? AssetImage(Assets.images.imageNull.path)
+    //         : NetworkImage(img.viewLink!) as ImageProvider,
+    //     Get.context!,
+    //   );
+    // }));
+  });
+}
 
-    result.fold((l) => showError(l.message), (r) {
-      images.value = r.data ?? [];
-      for (var img in r.data ?? []) {
-        precacheImage(
-          img.viewLink == null
-              ? AssetImage(Assets.images.imageNull.path)
-              : NetworkImage(img.viewLink!),
-          Get.context!,
-        );
-      }
-    });
-  }
 }

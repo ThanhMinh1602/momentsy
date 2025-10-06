@@ -18,12 +18,10 @@ class CameraControllerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: AppColor.black,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-        child: isEdit ? _buildSendPictureButton() : _buildCameraController(),
-      ),
+    return Container(
+      color: AppColor.black,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      child: isEdit ? _buildSendPictureButton() : _buildCameraController(),
     );
   }
 
@@ -50,22 +48,13 @@ class CameraControllerWidget extends StatelessWidget {
   }
 
   Widget _buildTakePictureButton() {
-    return _buildCircleButton(
-      onTap: appCameraController.captureImage,
-      child: const DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColor.white,
-          shape: BoxShape.circle,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSendPictureButton() {
-    return _buildCircleButton(
-      onTap: appCameraController.sendFile,
-      child: Obx(
-        () => Container(
+    return Obx(
+      () => _buildCircleButton(
+        onTap:
+            appCameraController.isLoading.value
+                ? null
+                : appCameraController.captureImage,
+        child: Container(
           padding: const EdgeInsets.all(14.0),
           decoration: const BoxDecoration(
             color: AppColor.white,
@@ -74,6 +63,28 @@ class CameraControllerWidget extends StatelessWidget {
           child:
               appCameraController.isLoading.value
                   ? CustomCircularProgress()
+                  : const SizedBox.shrink(), // hoặc bạn có thể để icon camera nhỏ ở đây nếu thích
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSendPictureButton() {
+    return Obx(
+      () => _buildCircleButton(
+        onTap:
+            appCameraController.isLoading.value
+                ? null
+                : appCameraController.sendFile,
+        child: Container(
+          padding: const EdgeInsets.all(14.0),
+          decoration: const BoxDecoration(
+            color: AppColor.white,
+            shape: BoxShape.circle,
+          ),
+          child:
+              appCameraController.isLoading.value
+                  ? CustomCircularProgress(size: 12)
                   : SvgPicture.asset(Assets.icons.send, color: AppColor.black),
         ),
       ),
@@ -81,7 +92,7 @@ class CameraControllerWidget extends StatelessWidget {
   }
 
   Widget _buildCircleButton({
-    required VoidCallback onTap,
+    required VoidCallback? onTap,
     required Widget child,
   }) {
     return GestureDetector(
@@ -93,7 +104,7 @@ class CameraControllerWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(color: AppColor.white, width: 3.0),
+          border: Border.all(color: AppColor.primary, width: 3.0),
         ),
         child: child,
       ),

@@ -12,6 +12,7 @@ import 'package:momentsy/app/features/auth/viewmodels/auth_view_model.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
+
   final authController = Get.find<AuthViewModel>();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
@@ -34,62 +35,77 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreenAuthWidget(
+      title: 'Đăng ký',
+
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          spacing: space24,
-          children: [
-            AuthTitle(title: 'Đăng ký', subTitle: 'Tạo tài khoản để tiếp tục!'),
-            _buildRegisterForm(),
-            Obx(() => CustomButton(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextfiled(
+                      controller: firstNameController,
+                      hintText: 'Họ',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: CustomTextfiled(
+                      controller: lastNameController,
+                      hintText: 'Tên',
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              CustomTextfiled(
+                controller: emailController,
+                hintText: 'Email',
+                validator: ValidatorUtils.validateEmail,
+              ),
+              const SizedBox(height: 12),
+              CustomTextfiled(
+                controller: passwordController,
+                isPassword: true,
+                hintText: 'Mật khẩu',
+                validator: ValidatorUtils.validatePassword,
+              ),
+              const SizedBox(height: 12),
+              CustomTextfiled(
+                controller: confirmPasswordController,
+                isPassword: true,
+                hintText: 'Xác nhận mật khẩu',
+                validator:
+                    (value) => ValidatorUtils.validateConfirmPassword(
+                      value,
+                      passwordController.text,
+                    ),
+              ),
+              const SizedBox(height: 24),
+              Obx(
+                () => CustomButton(
+                  isGradient: true,
                   isLoading: authController.isLoading.value,
                   btnText: 'Đăng ký',
                   onPressed: register,
-                )),
-            AuthSwitchText(
-              leftText: 'Bạn đã có tài khoản?',
-              rightText: 'Đăng nhập',
-              onTap: () => Get.back(),
-            ),
-          ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Center(
+                child: AuthSwitchText(
+                  leftText: 'Bạn đã có tài khoản?',
+                  rightText: 'Đăng nhập',
+                  onTap: () => Get.back(),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildRegisterForm() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        spacing: space6,
-        children: [
-          CustomTextfiled(
-            controller: firstNameController,
-            hintText: 'Họ',
-          ),
-          CustomTextfiled(
-            controller: lastNameController,
-            hintText: 'Tên',
-          ),
-          CustomTextfiled(
-            controller: emailController,
-            hintText: 'Email',
-            validator: ValidatorUtils.validateEmail,
-          ),
-          CustomTextfiled(
-            controller: passwordController,
-            isPassword: true,
-            hintText: 'Mật khẩu',
-            validator: ValidatorUtils.validatePassword,
-          ),
-          CustomTextfiled(
-            controller: confirmPasswordController,
-            isPassword: true,
-            hintText: 'Xác nhận mật khẩu',
-            validator: (value) => ValidatorUtils.validateConfirmPassword(
-                value, passwordController.text),
-          ),
-        ],
       ),
     );
   }

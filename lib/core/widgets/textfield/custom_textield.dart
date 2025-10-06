@@ -11,6 +11,7 @@ class CustomTextfiled extends StatefulWidget {
     this.controller,
     this.validator,
     this.suffixIcon,
+    this.focusNode,
   });
 
   final bool isPassword;
@@ -18,6 +19,7 @@ class CustomTextfiled extends StatefulWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
+  final FocusNode? focusNode;
 
   @override
   State<CustomTextfiled> createState() => _CustomTextfiledState();
@@ -29,27 +31,17 @@ class _CustomTextfiledState extends State<CustomTextfiled> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, 1),
-            spreadRadius: 0,
-            blurRadius: 2.0,
-            // ignore: deprecated_member_use
-            color: AppColor.kE4E5E7.withOpacity(0.24),
-          ),
-        ],
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.0)),
       child: TextFormField(
         controller: widget.controller,
+        focusNode: widget.focusNode,
         obscureText: widget.isPassword ? isHidden : false,
-        style: AppStyle.medium14,
+        style: AppStyle.medium14.copyWith(color: AppColor.textPrimary),
         validator: widget.validator ?? ValidatorUtils.isEmpty,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: AppStyle.medium14.copyWith(color: AppColor.kACB5BB),
+          hintStyle: AppStyle.medium14.copyWith(color: AppColor.textHint),
           suffixIcon:
               widget.isPassword
                   ? GestureDetector(
@@ -61,23 +53,33 @@ class _CustomTextfiledState extends State<CustomTextfiled> {
                     child: Icon(
                       isHidden ? Icons.visibility_off : Icons.visibility,
                       size: 16.0,
-                      color: AppColor.kACB5BB,
+                      color: AppColor.primary,
                     ),
                   )
                   : widget.suffixIcon,
           filled: true,
-          fillColor: AppColor.white,
+          fillColor: AppColor.surface,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: 14.0,
-            vertical: 12.5,
+            horizontal: 16.0,
+            vertical: 16.0,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(width: 1.0, color: AppColor.kEDF1F3),
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(
+              width: 1.0,
+              color: AppColor.grey.withOpacity(0.3),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(width: 1.5, color: AppColor.primary),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(width: 1.0, color: AppColor.kEDF1F3),
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(
+              width: 1.0,
+              color: AppColor.grey.withOpacity(0.3),
+            ),
           ),
         ),
       ),

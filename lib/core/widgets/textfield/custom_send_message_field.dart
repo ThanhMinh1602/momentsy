@@ -10,13 +10,16 @@ class CustomSendMessageField extends StatelessWidget {
     this.hintText,
     this.onPressed,
     this.controller,
+    this.focusNode,
   });
   final String? hintText;
   final void Function()? onPressed;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   @override
   Widget build(BuildContext context) {
     return CustomTextfiled(
+      focusNode: focusNode,
       controller: controller,
       hintText: hintText ?? 'Send a message',
       suffixIcon: IconButton(

@@ -1,101 +1,46 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'dart:async';
 
-class SocketService extends GetxService {
-  late IO.Socket _socket;
-  final String userId;
-  Function(Map<String, dynamic>)? _onMessageReceived;
-  Function(Map<String, dynamic>)? _onFriendRequestReceived;
-  Function(Map<String, dynamic>)? _onFriendRequestAccepted;
-  RxBool isConnected = false.obs;
+import 'package:momentsy/core/config/socket/socket_config.dart';
 
-  SocketService({required this.userId}) {
-    _connectSocket();
-  }
+class SocketService {
+  final SocketConfig _socket ;
 
-  void _connectSocket() {
-    _socket = IO.io(
-      dotenv.env['WS_API'],
-      IO.OptionBuilder()
-          .setTransports(['websocket'])
-          .disableAutoConnect()
-          .build(),
-    );
+  SocketService(this._socket);
 
-    _socket.connect();
-
-    _socket.onConnect((_) {
-      print("🟢 Connected to WebSocket");
-      isConnected.value = true;
-      _socket.emit("register", userId); // Đăng ký userId với BE
-    });
-
-    _socket.onReconnect((_) {
-      print("🔄 WebSocket reconnected");
-      _socket.emit("register", userId);
-    });
-
-    _socket.onDisconnect((_) {
-      print("🔴 Disconnected from WebSocket");
-      isConnected.value = false;
-    });
-
-    _socket.onConnectError((error) {
-      print("❌ Lỗi kết nối WebSocket: $error");
-      isConnected.value = false;
-    });
-
-    _listenForFriendRequests();
-    _listenForFriendRequestAccepted();
-  }
-
-  void _listenForFriendRequests() {
-    _socket.on("receiveFriendRequest", (data) {
-      print("📩 Nhận lời mời kết bạn: $data");
-      _onFriendRequestReceived?.call(data as Map<String, dynamic>);
-    });
-  }
-
-  void _listenForFriendRequestAccepted() {
-    _socket.on("friendRequestAccepted", (data) {
-      print("✅ Lời mời kết bạn được chấp nhận: $data");
-      _onFriendRequestAccepted?.call(data as Map<String, dynamic>);
-    });
-  }
-
-  // Setters để lắng nghe sự kiện
-  set onMessageReceived(Function(Map<String, dynamic>) callback) {
-    _onMessageReceived = callback;
-  }
-
-  set onFriendRequestReceived(Function(Map<String, dynamic>) callback) {
-    _onFriendRequestReceived = callback;
-  }
-
-  set onFriendRequestAccepted(Function(Map<String, dynamic>) callback) {
-    _onFriendRequestAccepted = callback;
-  }
-
-  // Phát sự kiện tới backend (nếu cần cho các trường hợp khác)
-  void emitEvent(String eventName, dynamic data) {
-    if (_socket.connected) {
-      _socket.emit(eventName, data);
-    } else {
-      print("⚠️ Không thể emit sự kiện `$eventName`, WebSocket chưa kết nối.");
-    }
-  }
-
-  @override
-  void onClose() {
-    dispose();
-    super.onClose();
+  void init(String userId) {
+    _socket.initSocket(userId);
   }
 
   void dispose() {
-    _socket.off("receiveFriendRequest");
-    _socket.off("friendRequestAccepted");
-    _socket.disconnect();
     _socket.dispose();
+  }
+}
+
+
+extension EmitEvent on SocketService{
+
+  /// Gửi tin nhắn
+  void sendMessage(Map<String, dynamic> messageData) {
+    print('sendMessage on socket: $messageData');
+    _socket.emit('send_message', messageData);
+  }
+
+  /// Gửi yêu cầu thông báo (ví dụ admin push noti)
+  void sendNotificationRequest(Map<String, dynamic> data) {
+    _socket.emit('send_notification', data);
+  }
+
+}
+
+extension ListenEvent on SocketService{
+
+  /// Lắng nghe tin nhắn đến
+  Stream<dynamic> onMessageReceived() {
+    return _socket.listenStream('new_message');
+  }
+
+  /// Lắng nghe khi có thông báo
+  Stream<dynamic> onFriendRequestNotification() {
+    return _socket.listenStream('friend_request');
   }
 }

@@ -7,6 +7,9 @@ import 'package:momentsy/app/features/auth/views/register_screen.dart';
 import 'package:momentsy/app/features/auth/views/reset_password_screen.dart';
 import 'package:momentsy/app/features/camera/bindings/camera_binding.dart';
 import 'package:momentsy/app/features/camera/views/camera_screen.dart';
+import 'package:momentsy/app/features/chat/bindings/chat_binding.dart';
+import 'package:momentsy/app/features/chat/bindings/chat_detail_binding.dart';
+import 'package:momentsy/app/features/chat/views/chat_detail_screen.dart';
 import 'package:momentsy/app/features/home/bindings/home_binding.dart';
 import 'package:momentsy/app/features/main/bindings/main_binding.dart';
 import 'package:momentsy/app/features/main/views/main_screen.dart';
@@ -63,24 +66,33 @@ class AppPages {
       bindings: [
         MainBinding(),
         HomeBinding(),
+        ChatBinding(),
         NotificationBinding(),
         SettingBinding(),
       ],
     ),
-
+    GetPage(
+      name: AppRoutes.CHATDETAIL,
+      page: () => ChatDetailScreen(),
+      transition: Transition.rightToLeft,
+      binding: ChatDetailBinding(),
+    ),
     GetPage(
       name: AppRoutes.CAMERA,
       page: () => CameraScreen(),
+      transition: Transition.zoom,
       binding: CameraBinding(),
     ),
     GetPage(
       name: AppRoutes.PROFILE,
+      transition: Transition.rightToLeft,
       page: () => ProfileScreen(),
       binding: SettingBinding(),
     ),
     GetPage(
       name: AppRoutes.SCANQR,
       page: () => QrScanScreen(),
+      transition: Transition.rightToLeft,
       binding: SettingBinding(),
     ),
   ];

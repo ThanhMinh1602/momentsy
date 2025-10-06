@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:momentsy/app/data/services/remote/file_service.dart';
 import 'package:momentsy/app/routes/app_routes.dart';
+import 'package:image/image.dart' as img;
+import 'package:momentsy/core/viewmodel/base_viewmodel.dart';
 
-class CameraViewModel extends GetxController {
+class CameraViewModel extends BaseViewModel {
   CameraViewModel({required FileService fileService})
     : _fileService = fileService;
 
@@ -16,12 +19,12 @@ class CameraViewModel extends GetxController {
 
   Rx<int> selectedCameraIndex = 0.obs;
   Rx<bool> isCameraInitialized = false.obs;
+  Rx<bool> isFrontCamera = false.obs;
   Rx<Offset?> focusPoint = Rx<Offset?>(null);
   Rx<double> zoomLevel = 1.0.obs;
   Rx<double> minZoom = 1.0.obs;
   Rx<double> maxZoom = 1.0.obs;
   RxString imagePath = ''.obs;
-  Rx<bool> isLoading = false.obs;
 
   @override
   void onInit() {
@@ -39,6 +42,8 @@ class CameraViewModel extends GetxController {
   Future<void> initializeCamera() async {
     cameras = await availableCameras();
     if (cameras?.isNotEmpty ?? false) {
+      isFrontCamera.value =
+          cameras![0].lensDirection == CameraLensDirection.front;
       await updateCameraIndex(selectedCameraIndex.value);
     }
   }
@@ -59,6 +64,8 @@ class CameraViewModel extends GetxController {
       minZoom.value = await newController.getMinZoomLevel();
       maxZoom.value = await newController.getMaxZoomLevel();
       isCameraInitialized.value = true;
+      isFrontCamera.value =
+          cameras![index].lensDirection == CameraLensDirection.front;
     } catch (e) {
       print("Error initializing camera: $e");
     }
@@ -87,7 +94,34 @@ class CameraViewModel extends GetxController {
     if (cameraController.value == null) return;
 
     try {
-      final image = await cameraController.value!.takePicture();
+      setLoading(true);
+      final XFile image = await cameraController.value!.takePicture();
+
+      if (isFrontCamera.value) {
+        // Process image in memory
+        final Uint8List bytes = await image.readAsBytes();
+        final img.Image? imageData = img.decodeImage(bytes);
+        if (imageData != null) {
+          final img.Image flippedImage = img.flipHorizontal(imageData);
+          final Uint8List flippedBytes = Uint8List.fromList(
+            img.encodeJpg(flippedImage, quality: 95),
+          );
+
+          // Write the processed image directly
+          await File(image.path).writeAsBytes(flippedBytes);
+        }
+      } else {
+        // for back camera, ensure the image is in JPG format
+        final Uint8List bytes = await image.readAsBytes();
+        final img.Image? imageData = img.decodeImage(bytes);
+        if (imageData != null) {
+          final Uint8List jpgBytes = Uint8List.fromList(
+            img.encodeJpg(imageData, quality: 95),
+          );
+          await File(image.path).writeAsBytes(jpgBytes);
+        }
+      }
+      setLoading(false);
       imagePath.value = image.path;
     } catch (e) {
       print("Error capturing image: $e");
@@ -98,13 +132,13 @@ class CameraViewModel extends GetxController {
   Future<void> sendFile() async {
     if (imagePath.value.isEmpty) return;
 
-    isLoading.value = true;
+    setLoading(true);
     final result = await _fileService.fileUpload(File(imagePath.value));
-    isLoading.value = false;
+    setLoading(false);
 
     result.fold((l) => Get.snackbar('Error', l.message), (r) {
       imagePath.value = '';
-      Get.snackbar('Success', r);
+      Get.snackbar('Success', r.message);
       Get.offAllNamed(AppRoutes.MAIN);
     });
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/constants/app_color.dart';
 
 class AuthSwitchText extends StatelessWidget {
   const AuthSwitchText({
@@ -17,11 +17,18 @@ class AuthSwitchText extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: leftText, style: AppStyle.medium12),
+          TextSpan(
+            text: leftText,
+            style: TextStyle(fontSize: 14, color: AppColor.textSecondary),
+          ),
           WidgetSpan(child: SizedBox(width: 6.0)),
           TextSpan(
             text: rightText,
-            style: AppStyle.semiBold12,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColor.primary,
+            ),
             recognizer: TapGestureRecognizer()..onTap = onTap,
           ),
         ],

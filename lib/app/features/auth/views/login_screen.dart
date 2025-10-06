@@ -8,6 +8,7 @@ import 'package:momentsy/app/routes/app_routes.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/extension/build_context_extension.dart';
 import 'package:momentsy/core/widgets/button/custom_button.dart';
 import 'package:momentsy/core/widgets/textfield/custom_textield.dart';
 import 'package:momentsy/app/data/body/login_body.dart';
@@ -48,32 +49,51 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return BaseScreenAuthWidget(
+      isLogin: true,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          spacing: space24,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset(Assets.icons.logo),
+            const SizedBox(height: space32),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: isKeyboardOpen ? 0 : context.width * 0.25,
+              height: isKeyboardOpen ? 0 : context.width * 0.25,
+              child: Image.asset(Assets.icons.appicon.path, fit: BoxFit.cover),
+            ),
+            const SizedBox(height: space24),
             AuthTitle(
               title: 'Đăng nhập',
               subTitle: 'Nhập email và mật khẩu của bạn để đăng nhập',
             ),
+            const SizedBox(height: space24),
             _buildLoginForm(),
+            const SizedBox(height: space24),
             Obx(
               () => CustomButton(
                 isLoading: authController.isLoading.value,
                 btnText: 'Đăng nhập',
+                isGradient: true,
                 onPressed: login,
               ),
             ),
-            _buildLoginWith(),
-            _buildSocialMethod(),
-            AuthSwitchText(
-              leftText: 'Bạn chưa có tài khoản?',
-              rightText: 'Đăng ký',
-              onTap: () => Get.toNamed(AppRoutes.REGISTER),
-            ),
+            const SizedBox(height: space24),
+            if (!isKeyboardOpen) ...[
+              _buildLoginWith(),
+              const SizedBox(height: space16),
+              _buildSocialMethod(),
+              const SizedBox(height: space24),
+              AuthSwitchText(
+                leftText: 'Bạn chưa có tài khoản?',
+                rightText: 'Đăng ký',
+                onTap: () => Get.toNamed(AppRoutes.REGISTER),
+              ),
+              const SizedBox(height: space32),
+            ],
           ],
         ),
       ),
@@ -103,8 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
         height: 48.0,
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
         decoration: BoxDecoration(
-          color: AppColor.white,
-          border: Border.all(color: AppColor.kEFF0F6),
+          color: AppColor.cardLight,
           borderRadius: BorderRadius.circular(borderRadius10),
         ),
         child: SvgPicture.asset(icon),
@@ -116,11 +135,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       children: [
         Expanded(
-          child: Divider(color: AppColor.white, endIndent: 16.0, thickness: 1),
+          child: Divider(
+            color: AppColor.grey.withOpacity(0.3),
+            endIndent: 16.0,
+            thickness: 1,
+          ),
         ),
-        Text('Đăng nhập bằng', style: AppStyle.regular12),
+        Text(
+          'Đăng nhập bằng',
+          style: AppStyle.regular12.copyWith(color: AppColor.textSecondary),
+        ),
         Expanded(
-          child: Divider(color: AppColor.white, indent: 16.0, thickness: 1),
+          child: Divider(
+            color: AppColor.grey.withOpacity(0.3),
+            indent: 16.0,
+            thickness: 1,
+          ),
         ),
       ],
     );
@@ -132,7 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Column(
         children: [
           CustomTextfiled(controller: emailController, hintText: 'Email'),
-          SizedBox(height: 6.0),
+
+          SizedBox(height: space16),
           CustomTextfiled(
             controller: passwordController,
             hintText: 'Mật khẩu',

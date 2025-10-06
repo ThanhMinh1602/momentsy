@@ -4,93 +4,147 @@ import 'package:momentsy/app/data/models/image_model.dart';
 import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/constants/app_style.dart';
+import 'package:momentsy/core/widgets/card/custom_avatar.dart';
+import 'package:momentsy/core/widgets/progess/custom_circular_progress.dart';
 import 'package:momentsy/gen/assets.gen.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
 class StatusCardWidget extends StatelessWidget {
-  const StatusCardWidget({super.key, this.story});
+  const StatusCardWidget({super.key, this.story, required this.isFocus});
 
   final ImageModel? story;
+  final bool isFocus;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius10),
-      child: Stack(children: [_buildImage(), _buildImageNotifi()]),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(),
+        child: Stack(
+          children: [
+            _buildImage(),
+            _buildImageNotifi(),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildImageNotifi() {
     return Positioned(
-      left: space12,
-      right: space12,
       top: space12,
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: AppColor.white,
-            backgroundImage:
-                story?.uploadedBy.avatar != null
-                    ? NetworkImage(story!.uploadedBy.avatar!)
-                    : AssetImage(Assets.images.avatarNull.path),
-            radius: 22,
-          ),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                story?.uploadedBy.name ?? 'Unknown',
-                maxLines: 1,
-                style: AppStyle.bold16.copyWith(
-                  shadows: [
-                    Shadow(
-                      color: Colors.black,
-                      offset: Offset(1, 1),
-                      blurRadius: 20,
-                    ),
-                  ],
-                ),
+      left: 0,
+      right: 0,
+      child: Center(
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 400),
+          scale: isFocus ? 0 : 1.2,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: space6,
+              vertical: space4,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withOpacity(0.5),
+                  Colors.black.withOpacity(0.3),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
-              Text(
-                timeago.format(
-                  story?.uploadedAt ?? DateTime.now(),
-                  locale: "vi",
-                ),
-                style: AppStyle.regular12.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black,
-                      offset: Offset(1, 1),
-                      blurRadius: 20,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildAvatar(),
+                const SizedBox(width: 5),
+                _buildUserInfo(),
+              ],
+            ),
           ),
-          Spacer(),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.more_horiz, color: Colors.white),
-          ),
-        ],
+        ),
       ),
     );
   }
 
+  Widget _buildAvatar() {
+    return CustomAvatar(
+      image: story?.uploadedBy?.avatar,
+      size: 30,
+      showBorder: true,
+    );
+  }
+
+  Widget _buildUserInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          story?.uploadedBy?.name ?? 'Unknown',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppStyle.bold12.copyWith(color: AppColor.white),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          timeago.format(story?.uploadedAt ?? DateTime.now(), locale: "vi"),
+          style: TextStyle(
+            fontSize: 8,
+            color: AppColor.white.withOpacity(0.6),
+            fontWeight: FontWeight.w400,
+            height: 1.0,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.2),
+                offset: const Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildImage() {
-    return story?.downloadLink == null
-        ? Image.asset(Assets.images.imageNull.path)
-        : CachedNetworkImage(
-          imageUrl: story!.downloadLink,
-          fit: BoxFit.scaleDown,
-          placeholder:
-              (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
-          errorWidget:
-              (context, url, error) => const Icon(Icons.error, size: 50),
-        );
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppColor.cardLight,
+      ),
+      child: story?.downloadLink == null
+          ? Image.asset(Assets.images.imageNull.path, fit: BoxFit.cover)
+          : CachedNetworkImage(
+              imageUrl: story!.downloadLink!,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Center(
+                child: CustomCircularProgress()
+              ),
+              errorWidget: (context, url, error) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 40,
+                      color: AppColor.error,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Không thể tải ảnh',
+                      style: TextStyle(
+                        color: AppColor.textSecondary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+    );
   }
 }

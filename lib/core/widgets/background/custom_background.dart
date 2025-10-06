@@ -9,8 +9,12 @@ class CustomBackground extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          // ignore: deprecated_member_use
-          colors: [AppColor.kEBC894.withOpacity(0.8), AppColor.kB49EF4],
+          colors: [
+            AppColor.gradientStart,
+            AppColor.gradientMiddle,
+            AppColor.gradientEnd,
+          ],
+          stops: [0.0, 0.5, 1.0],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

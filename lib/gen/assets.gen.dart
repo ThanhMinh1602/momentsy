@@ -12,6 +12,12 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/appicon.png
+  AssetGenImage get appicon => const AssetGenImage('assets/icons/appicon.png');
+
+  /// File path: assets/icons/appiconsvg.svg
+  String get appiconsvg => 'assets/icons/appiconsvg.svg';
+
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
 
@@ -43,7 +49,9 @@ class $AssetsIconsGen {
   String get textSquare => 'assets/icons/text-square.svg';
 
   /// List of all assets
-  List<String> get values => [
+  List<dynamic> get values => [
+    appicon,
+    appiconsvg,
     apple,
     arrowBack,
     facebook,
@@ -72,12 +80,29 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [avatarNull, imageNull];
 }
 
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/add_first_image.json
+  String get addFirstImage => 'assets/lotties/add_first_image.json';
+
+  /// File path: assets/lotties/loading.json
+  String get loading => 'assets/lotties/loading.json';
+
+  /// File path: assets/lotties/swipe_right.json
+  String get swipeRight => 'assets/lotties/swipe_right.json';
+
+  /// List of all assets
+  List<String> get values => [addFirstImage, loading, swipeRight];
+}
+
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
 
   /// List of all assets
   static List<String> get values => [aEnv];

@@ -26,33 +26,35 @@ class TakePictureResult extends StatelessWidget {
   Widget _buildImageEditWidget() {
     return Column(
       children: [
-        Stack(
-          children: [
-            Image.file(File(appCameraController.imagePath.value)),
-            Positioned(
-              top: 12.0,
-              left: 12.0,
-              right: 12.0,
-              child: Row(
-                spacing: space12,
-                children: [
-                  _buildIconButton(
-                    iconPath: Assets.icons.arrowBack,
-                    onTap: () {
-                      appCameraController.imagePath.value = '';
-                    },
-                  ),
-                  Spacer(),
-                  _buildIconButton(
-                    iconPath: Assets.icons.textSquare,
-                    onTap: () {},
-                  ),
-                  _buildIconButton(iconPath: Assets.icons.musicNote),
-                  _buildIconButton(iconPath: Assets.icons.paintbrush),
-                ],
+        Expanded(
+          child: Stack(
+            children: [
+              Image.file(File(appCameraController.imagePath.value)),
+              Positioned(
+                top: 12.0,
+                left: 12.0,
+                right: 12.0,
+                child: Row(
+                  spacing: space12,
+                  children: [
+                    _buildIconButton(
+                      iconPath: Assets.icons.arrowBack,
+                      onTap: () {
+                        appCameraController.imagePath.value = '';
+                      },
+                    ),
+                    Spacer(),
+                    _buildIconButton(
+                      iconPath: Assets.icons.textSquare,
+                      onTap: () {},
+                    ),
+                    _buildIconButton(iconPath: Assets.icons.musicNote),
+                    _buildIconButton(iconPath: Assets.icons.paintbrush),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         CameraControllerWidget(
           appCameraController: appCameraController,
@@ -69,7 +71,7 @@ class TakePictureResult extends StatelessWidget {
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColor.k1A1C1E.withOpacity(0.4),
+          color: AppColor.black.withOpacity(0.4),
         ),
         child: SvgPicture.asset(iconPath, width: 16, color: AppColor.white),
       ),

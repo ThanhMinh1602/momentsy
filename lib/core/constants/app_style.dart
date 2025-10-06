@@ -46,6 +46,11 @@ class AppStyle {
     fontWeight: FontWeight.w400,
     color: AppColor.white,
   );
+  static TextStyle regular16 = TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.w400,
+    color: AppColor.white,
+  );
   static TextStyle regular10 = TextStyle(
     fontSize: 10.0,
     fontWeight: FontWeight.w400,
@@ -59,11 +64,16 @@ class AppStyle {
   static TextStyle medium14 = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
-    color: AppColor.k1A1C1E,
+    color: AppColor.textPrimary,
   );
 
   static TextStyle semiBold12 = TextStyle(
     fontSize: 12.0,
+    fontWeight: FontWeight.w600,
+    color: AppColor.primary,
+  );
+  static TextStyle semiBold14 = TextStyle(
+    fontSize: 14.0,
     fontWeight: FontWeight.w600,
     color: AppColor.primary,
   );

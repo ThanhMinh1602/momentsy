@@ -1,13 +1,10 @@
 class LoginBody {
   final String email;
   final String password;
+  String? deviceToken;
 
-  LoginBody(this.email, this.password);
-
+  LoginBody(this.email, this.password, {this.deviceToken});
   Map<String, dynamic> toJson() {
-    return {
-      "email": email,
-      "password": password,
-    };
+    return {"email": email, "password": password, "deviceToken": deviceToken};
   }
 }

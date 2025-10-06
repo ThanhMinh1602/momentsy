@@ -4,6 +4,7 @@
 const double space4 = 4.0;
 const double space6 = 6.0;
 const double space8 = 8.0;
+const double space10 = 10.0;
 const double space12 = 12.0;
 const double space16 = 16.0;
 const double space24 = 24.0;
@@ -17,3 +18,9 @@ const double borderRadius12 = 12.0;
 const double borderRadius16 = 16.0;
 const double borderRadius24 = 24.0;
 const double borderRadius32 = 32.0;
+
+// App Padding
+const double horizontalPadding = 12.0;
+const double verticalPadding = 12.0;
+const double horizontalPaddingAuth = 24.0;
+const double verticalPaddingAuth = 16.0;

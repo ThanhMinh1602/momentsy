@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:momentsy/app/features/auth/views/widgets/auth_title.dart';
 import 'package:momentsy/app/features/auth/views/widgets/base_screen_auth_widget.dart';
+import 'package:momentsy/core/constants/app_color.dart';
 import 'package:momentsy/core/constants/app_dimensions.dart';
 import 'package:momentsy/core/widgets/button/custom_button.dart';
 import 'package:momentsy/core/widgets/textfield/custom_opt_field.dart';
@@ -28,18 +29,49 @@ class _ConfirmOtpScreenState extends State<ConfirmOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreenAuthWidget(
+      title: 'Xác thực mã OTP',
       child: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: space24,
         children: [
-          AuthTitle(
-            title: 'Kiểm tra email của bạn!',
-            subTitle:
-                'Chúng tôi đã gửi liên kết đặt lại đến ${Get.arguments} nhập mã 4 chữ số được đề cập trong email',
-          ),
+          buildSubTitle(context),
+
           CustomOtpField(controller: otpController),
-          CustomButton(btnText: 'Xác thực mã', onPressed: verifyOtp),
+          CustomButton(
+            isGradient: true,
+            btnText: 'Xác thực mã',
+            onPressed: verifyOtp,
+          ),
         ],
+      ),
+    );
+  }
+
+  Padding buildSubTitle(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: context.textTheme.bodyMedium?.copyWith(
+            fontSize: 14,
+            height: 1.6, // Giãn dòng nhẹ cho dễ đọc
+            color: AppColor.textPrimary,
+          ),
+          children: [
+            const TextSpan(text: 'Chúng tôi đã gửi mã xác thực đến email:\n'),
+            TextSpan(
+              text: '${Get.arguments}\n',
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: AppColor.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const TextSpan(
+              text: 'Vui lòng nhập mã xác thực bên dưới để tiếp tục.',
+            ),
+          ],
+        ),
       ),
     );
   }
